@@ -1,0 +1,7 @@
+{
+  "name": "node-ble",
+  "version": "0.0.1",
+  "repository": "https://github.com/chrvadala/node-ble.git",
+  "author": "Christian <chr.vadala@gmail.com>",
+  "license": "MIT"
+}
