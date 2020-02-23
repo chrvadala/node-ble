@@ -82,3 +82,19 @@ test('derive', async () => {
 
   await bus.destroy()
 })
+
+test('disableProps', async () => {
+  const bus = new Bus(null,
+    'org.bluez',              // service
+    '/org/bluez',             // object
+    'org.bluez.AgentManager1', // iface
+    {useProps: false}
+  )
+
+  expect(Array.isArray(await bus.children())).toBe(true)
+
+  await expect(bus.props()).rejects.toThrow()
+  await expect(bus.prop('Test')).rejects.toThrow()
+
+  await bus.destroy()
+})

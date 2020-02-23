@@ -1,11 +1,15 @@
 const {systemBus: createSystemBus} = require('dbus-next');
 
 class Bus {
-  constructor(dbus, service, object, iface) {
+  constructor(dbus, service, object, iface, options) {
     this.dbus = dbus || createSystemBus();
     this.service = service
     this.object = object
     this.iface = iface
+    this.options = {
+      useProps: true,
+      ...options,
+    }
 
     this._ready = false
     this._objectProxy = null
@@ -17,11 +21,12 @@ class Bus {
     if (this._ready) return
     const objectProxy = this._objectProxy = await this.dbus.getProxyObject(this.service, this.object);
     this._ifaceProxy = await objectProxy.getInterface(this.iface)
-    this._propsProxy = await objectProxy.getInterface('org.freedesktop.DBus.Properties')
+    if (this.options.useProps) this._propsProxy = await objectProxy.getInterface('org.freedesktop.DBus.Properties')
     this._ready = true
   }
 
   async props() {
+    if (!this.options.useProps) throw new Error('props not available')
     await this._prepare()
     const rawProps = await this._propsProxy.GetAll(this.iface)
     const props = {}
@@ -32,6 +37,7 @@ class Bus {
   }
 
   async prop(propName) {
+    if (!this.options.useProps) throw new Error('props not available')
     await this._prepare()
     const rawProp = await this._propsProxy.Get(this.iface, propName)
     return rawProp.value
