@@ -4,7 +4,7 @@ test('props/prop', async () => {
   const TEST_PROP = 'KernelName'
   const TEST_PROP_VALUE = 'Linux'
 
-  const bus = new Bus(null,
+  const bus = new Bus(
     'org.freedesktop.hostname1',  //service
     '/org/freedesktop/hostname1', // object
     'org.freedesktop.hostname1'   // iface
@@ -21,7 +21,7 @@ test('props/prop', async () => {
 })
 
 test('callMethod', async () => {
-  const bus = new Bus(null,
+  const bus = new Bus(
     'org.freedesktop.hostname1', //service
     '/org',                      // object
     'org.freedesktop.DBus.Peer'  // iface
@@ -51,7 +51,7 @@ test('buildChildren', () => {
 })
 
 test('children', async () => {
-  const bus = new Bus(null,
+  const bus = new Bus(
     'org.freedesktop.hostname1',          //service
     '/org',                               // object
     'org.freedesktop.DBus.Introspectable' // iface
@@ -64,7 +64,7 @@ test('children', async () => {
 })
 
 test('derive', async () => {
-  const bus = new Bus(null,
+  const bus = new Bus(
     'org.freedesktop.hostname1', //service
     '/org/freedesktop',          // object
     'org.freedesktop.DBus.Peer'  // iface
@@ -84,7 +84,7 @@ test('derive', async () => {
 })
 
 test('disableProps', async () => {
-  const bus = new Bus(null,
+  const bus = new Bus(
     'org.bluez',              // service
     '/org/bluez',             // object
     'org.bluez.AgentManager1', // iface

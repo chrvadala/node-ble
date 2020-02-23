@@ -1,13 +1,15 @@
 const {systemBus: createSystemBus} = require('dbus-next');
 
 class Bus {
-  constructor(dbus, service, object, iface, options) {
-    this.dbus = dbus || createSystemBus();
+  constructor(service, object, iface, options = {}) {
     this.service = service
     this.object = object
     this.iface = iface
+
+    this.dbus = options.dbus || createSystemBus();
     this.options = {
       useProps: true,
+      dbus: null,
       ...options,
     }
 
@@ -59,7 +61,7 @@ class Bus {
   }
 
   derive(object, iface) {
-    return new Bus(this.dbus, this.service, object, iface)
+    return new Bus(this.service, object, iface, {dbus: this.dbus})
   }
 }
 
