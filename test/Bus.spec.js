@@ -1,4 +1,4 @@
-const {Bus} = require('../src/Bus')
+const {Bus, buildChildren} = require('../src/Bus')
 
 test('props/prop', async () => {
   const TEST_PROP = 'KernelName'
@@ -35,6 +35,21 @@ test('callMethod', async () => {
   await bus.destroy()
 })
 
+test('buildChildren', () => {
+  const nodes = [
+    '/foo',
+    '/foo/a',
+    '/foo/b/1',
+    '/foo/c/1',
+    '/foo/c/2',
+  ]
+
+  expect(buildChildren('/bar', nodes)).toEqual([])
+  expect(buildChildren('/', nodes)).toEqual(['foo'])
+  expect(buildChildren('/foo', nodes)).toEqual(['a', 'b', 'c'])
+  expect(buildChildren('/foo/c', nodes)).toEqual(['1', '2'])
+})
+
 test('children', async () => {
   const bus = new Bus(null,
     'org.freedesktop.hostname1',          //service
@@ -43,7 +58,7 @@ test('children', async () => {
   )
 
   const children = await bus.children()
-  expect(children).toEqual(['/org/freedesktop'])
+  expect(children).toEqual(['freedesktop'])
 
   await bus.destroy()
 })

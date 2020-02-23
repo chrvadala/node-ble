@@ -39,7 +39,7 @@ class Bus {
 
     async children() {
         await this._prepare()
-        return this._objectProxy.nodes
+        return buildChildren(this.object, this._objectProxy.nodes)
     }
 
     async callMethod(methodName, ...args) {
@@ -57,4 +57,23 @@ class Bus {
     }
 }
 
+function buildChildren(path, nodes) {
+  if (path === "/") path = ""
+  const children = new Set()
+  for (const node of nodes) {
+    if (!node.startsWith(path)) continue
+
+    const end = node.indexOf('/', path.length + 1)
+    const sub = (end >= 0) ? node.substring(path.length + 1, end) : node.substring(path.length + 1)
+    if (sub.length < 1) continue
+
+    children.add(sub)
+  }
+  return Array.from(children.values())
+}
+
+
 module.exports.Bus = Bus
+module.exports.buildChildren = buildChildren
+
+
