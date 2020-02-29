@@ -1,4 +1,4 @@
-class Bus {
+class BusHelper {
   constructor(dbus, service, object, iface, options = {}) {
     this.service = service
     this.object = object
@@ -71,7 +71,7 @@ function buildChildren(path, nodes) {
 }
 
 
-module.exports.Bus = Bus
+module.exports.BusHelper = BusHelper
 module.exports.buildChildren = buildChildren
 
 

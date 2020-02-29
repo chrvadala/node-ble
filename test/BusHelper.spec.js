@@ -1,5 +1,5 @@
 const {systemBus: createSystemBus} = require('dbus-next');
-const {Bus, buildChildren} = require('../src/Bus')
+const {BusHelper, buildChildren} = require('../src/BusHelper')
 
 let dbus;
 
@@ -10,7 +10,7 @@ test('props/prop', async () => {
   const TEST_PROP = 'KernelName'
   const TEST_PROP_VALUE = 'Linux'
 
-  const bus = new Bus(
+  const bus = new BusHelper(
     dbus,
     'org.freedesktop.hostname1',  //service
     '/org/freedesktop/hostname1', // object
@@ -26,7 +26,7 @@ test('props/prop', async () => {
 })
 
 test('callMethod', async () => {
-  const bus = new Bus(
+  const bus = new BusHelper(
     dbus,
     'org.freedesktop.hostname1', //service
     '/org',                      // object
@@ -55,7 +55,7 @@ test('buildChildren', () => {
 })
 
 test('children', async () => {
-  const bus = new Bus(
+  const bus = new BusHelper(
     dbus,
     'org.freedesktop.hostname1',          //service
     '/org',                               // object
@@ -67,7 +67,7 @@ test('children', async () => {
 })
 
 test('disableProps', async () => {
-  const bus = new Bus(
+  const bus = new BusHelper(
     dbus,
     'org.bluez',              // service
     '/org/bluez',             // object
