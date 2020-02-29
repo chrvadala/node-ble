@@ -1,15 +1,13 @@
-const {systemBus: createSystemBus} = require('dbus-next');
-
 class Bus {
-  constructor(service, object, iface, options = {}) {
+  constructor(dbus, service, object, iface, options = {}) {
     this.service = service
     this.object = object
     this.iface = iface
 
-    this.dbus = options.dbus || createSystemBus();
+    this.dbus = dbus
+
     this.options = {
       useProps: true,
-      dbus: null,
       ...options,
     }
 
@@ -54,14 +52,6 @@ class Bus {
     await this._prepare()
     const rawRes = await this._ifaceProxy[methodName](...args)
     return rawRes
-  }
-
-  async destroy() {
-    this.dbus.disconnect()
-  }
-
-  derive(object, iface) {
-    return new Bus(this.service, object, iface, {dbus: this.dbus})
   }
 }
 

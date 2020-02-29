@@ -1,10 +1,17 @@
+const {systemBus: createSystemBus} = require('dbus-next');
 const {Bus, buildChildren} = require('../src/Bus')
+
+let dbus;
+
+beforeAll(() => dbus = createSystemBus())
+afterAll(async () => await dbus.disconnect())
 
 test('props/prop', async () => {
   const TEST_PROP = 'KernelName'
   const TEST_PROP_VALUE = 'Linux'
 
   const bus = new Bus(
+    dbus,
     'org.freedesktop.hostname1',  //service
     '/org/freedesktop/hostname1', // object
     'org.freedesktop.hostname1'   // iface
@@ -16,12 +23,11 @@ test('props/prop', async () => {
 
   const prop = await bus.prop(TEST_PROP)
   expect(prop).toEqual(TEST_PROP_VALUE)
-
-  await bus.destroy()
 })
 
 test('callMethod', async () => {
   const bus = new Bus(
+    dbus,
     'org.freedesktop.hostname1', //service
     '/org',                      // object
     'org.freedesktop.DBus.Peer'  // iface
@@ -31,8 +37,6 @@ test('callMethod', async () => {
 
   const res = await bus.callMethod('GetMachineId')
   expect(typeof res).toBe('string')
-
-  await bus.destroy()
 })
 
 test('buildChildren', () => {
@@ -52,6 +56,7 @@ test('buildChildren', () => {
 
 test('children', async () => {
   const bus = new Bus(
+    dbus,
     'org.freedesktop.hostname1',          //service
     '/org',                               // object
     'org.freedesktop.DBus.Introspectable' // iface
@@ -59,32 +64,11 @@ test('children', async () => {
 
   const children = await bus.children()
   expect(children).toEqual(['freedesktop'])
-
-  await bus.destroy()
-})
-
-test('derive', async () => {
-  const bus = new Bus(
-    'org.freedesktop.hostname1', //service
-    '/org/freedesktop',          // object
-    'org.freedesktop.DBus.Peer'  // iface
-  )
-
-  await bus.callMethod('Ping')
-
-  const derivatedBus = bus.derive(
-    '/org/freedesktop/hostname1',   //subobject
-    'org.freedesktop.hostname1',    //iface
-  )
-
-  const obj = await derivatedBus.props()
-  expect(typeof obj).toBe('object')
-
-  await bus.destroy()
 })
 
 test('disableProps', async () => {
   const bus = new Bus(
+    dbus,
     'org.bluez',              // service
     '/org/bluez',             // object
     'org.bluez.AgentManager1', // iface
@@ -95,6 +79,4 @@ test('disableProps', async () => {
 
   await expect(bus.props()).rejects.toThrow()
   await expect(bus.prop('Test')).rejects.toThrow()
-
-  await bus.destroy()
 })
