@@ -4,8 +4,10 @@
   "repository": "https://github.com/chrvadala/node-ble.git",
   "author": "Christian <chr.vadala@gmail.com>",
   "license": "MIT",
+  "main": "src/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --testPathIgnorePatterns=e2e.spec.js",
+    "test-e2e": "jest"
   },
   "dependencies": {
     "dbus-next": "^0.8.2"
