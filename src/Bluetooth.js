@@ -1,11 +1,10 @@
-const {BLUEZ_SERVICE} = require('./bluez')
 const {BusHelper} = require('./BusHelper')
 const {Adapter} = require('./Adapter')
 
 class Bluetooth {
   constructor(dbus) {
     this.dbus = dbus
-    this.helper = new BusHelper(dbus, BLUEZ_SERVICE, '/org/bluez', 'org.bluez.AgentManager1', {useProps: false})
+    this.helper = new BusHelper(dbus, 'org.bluez', '/org/bluez', 'org.bluez.AgentManager1', {useProps: false})
   }
 
   async adapters() {
