@@ -45,7 +45,7 @@ class BusHelper {
 
   async children() {
     await this._prepare()
-    return buildChildren(this.object, this._objectProxy.nodes)
+    return BusHelper.buildChildren(this.object, this._objectProxy.nodes)
   }
 
   async callMethod(methodName, ...args) {
@@ -53,25 +53,23 @@ class BusHelper {
     const rawRes = await this._ifaceProxy[methodName](...args)
     return rawRes
   }
-}
 
-function buildChildren(path, nodes) {
-  if (path === "/") path = ""
-  const children = new Set()
-  for (const node of nodes) {
-    if (!node.startsWith(path)) continue
+  static buildChildren(path, nodes) {
+    if (path === "/") path = ""
+    const children = new Set()
+    for (const node of nodes) {
+      if (!node.startsWith(path)) continue
 
-    const end = node.indexOf('/', path.length + 1)
-    const sub = (end >= 0) ? node.substring(path.length + 1, end) : node.substring(path.length + 1)
-    if (sub.length < 1) continue
+      const end = node.indexOf('/', path.length + 1)
+      const sub = (end >= 0) ? node.substring(path.length + 1, end) : node.substring(path.length + 1)
+      if (sub.length < 1) continue
 
-    children.add(sub)
+      children.add(sub)
+    }
+    return Array.from(children.values())
   }
-  return Array.from(children.values())
 }
 
-
-module.exports.BusHelper = BusHelper
-module.exports.buildChildren = buildChildren
+module.exports = BusHelper
 
 

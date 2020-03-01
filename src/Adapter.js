@@ -1,5 +1,5 @@
 const Device = require('./Device')
-const {BusHelper} = require('./BusHelper')
+const BusHelper = require('./BusHelper')
 
 class Adapter {
   constructor(dbus, adapter) {

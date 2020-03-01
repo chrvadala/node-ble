@@ -1,5 +1,5 @@
 const {systemBus: createSystemBus} = require('dbus-next');
-const {Bluetooth} = require('./Bluetooth')
+const Bluetooth = require('./Bluetooth')
 
 function createBluetooth() {
   const dbus = createSystemBus()

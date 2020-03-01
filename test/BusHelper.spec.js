@@ -1,5 +1,5 @@
 const {systemBus: createSystemBus} = require('dbus-next');
-const {BusHelper, buildChildren} = require('../src/BusHelper')
+const BusHelper = require('../src/BusHelper')
 
 let dbus;
 
@@ -48,10 +48,10 @@ test('buildChildren', () => {
     '/foo/c/2',
   ]
 
-  expect(buildChildren('/bar', nodes)).toEqual([])
-  expect(buildChildren('/', nodes)).toEqual(['foo'])
-  expect(buildChildren('/foo', nodes)).toEqual(['a', 'b', 'c'])
-  expect(buildChildren('/foo/c', nodes)).toEqual(['1', '2'])
+  expect(BusHelper.buildChildren('/bar', nodes)).toEqual([])
+  expect(BusHelper.buildChildren('/', nodes)).toEqual(['foo'])
+  expect(BusHelper.buildChildren('/foo', nodes)).toEqual(['a', 'b', 'c'])
+  expect(BusHelper.buildChildren('/foo/c', nodes)).toEqual(['1', '2'])
 })
 
 test('children', async () => {

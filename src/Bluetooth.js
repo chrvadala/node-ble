@@ -1,4 +1,4 @@
-const {BusHelper} = require('./BusHelper')
+const BusHelper = require('./BusHelper')
 const Adapter = require('./Adapter')
 
 class Bluetooth {
@@ -30,6 +30,6 @@ class Bluetooth {
   }
 }
 
-module.exports.Bluetooth = Bluetooth
+module.exports = Bluetooth
 
 
