@@ -1,5 +1,5 @@
 const {BusHelper} = require('./BusHelper')
-const {Adapter} = require('./Adapter')
+const Adapter = require('./Adapter')
 
 class Bluetooth {
   constructor(dbus) {

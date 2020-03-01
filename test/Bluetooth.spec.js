@@ -2,7 +2,7 @@ jest.mock('../src/BusHelper');
 jest.mock('../src/Adapter');
 
 const {Bluetooth} = require('../src/Bluetooth')
-const {Adapter} = require('../src/Adapter')
+const Adapter = require('../src/Adapter')
 
 const dbus = Symbol()
 
