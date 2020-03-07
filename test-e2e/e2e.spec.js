@@ -1,9 +1,17 @@
 const {createBluetooth} = require('..')
+let dbus = require('dbus-next');
+let Variant = dbus.Variant;
+
+const TEST_DEVICE = process.env.TEST_DEVICE
 
 let bluetooth, destroy
 
 beforeAll(() => ({bluetooth, destroy} = createBluetooth()))
 afterAll(() => destroy())
+
+test("check properly configured", () => {
+  expect(TEST_DEVICE).not.toBeUndefined()
+})
 
 test('get adapters', async () => {
   const adapters = await bluetooth.adapters()
@@ -24,3 +32,22 @@ test('adapter', async () => {
 
   await adapter.stopDiscovery()
 })
+
+test('device connection', async () => {
+  const adapter = await bluetooth.defaultAdapter()
+
+  //WORKAROUND: set filters
+  await adapter.helper.callMethod("SetDiscoveryFilter", {
+    Transport: new Variant("s", "le"),
+  })
+
+  if (!await adapter.isDiscovering()) await adapter.startDiscovery()
+
+  const device = await adapter.waitDevice(TEST_DEVICE)
+
+  const string = await device.toString()
+
+  expect(typeof string).toBe('string')
+
+  console.log({device: string})
+}, 20 * 1000)

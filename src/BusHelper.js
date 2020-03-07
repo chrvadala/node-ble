@@ -44,6 +44,7 @@ class BusHelper {
   }
 
   async children() {
+    this._ready = false //WORKAROUND: it forces to construct a new ProxyObject
     await this._prepare()
     return BusHelper.buildChildren(this.object, this._objectProxy.nodes)
   }
