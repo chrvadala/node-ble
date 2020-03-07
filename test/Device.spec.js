@@ -23,6 +23,9 @@ test("props", async () => {
   await expect(device.getAlias()).resolves.toEqual('_alias_')
   await expect(device.getRSSI()).resolves.toEqual(100)
 
+  await expect(device.isConnected()).resolves.toEqual(true)
+  await expect(device.isPaired()).resolves.toEqual(true)
+
   await expect(device.toString()).resolves.toEqual('_name_ [00:00:00:00:00:00]')
 })
 
