@@ -1,3 +1,5 @@
+const {Variant} = require('dbus-next');
+
 class BusHelper {
   constructor(dbus, service, object, iface, options = {}) {
     this.service = service
@@ -51,7 +53,7 @@ class BusHelper {
 
   async callMethod(methodName, ...args) {
     await this._prepare()
-    const rawRes = await this._ifaceProxy[methodName](...args)
+    const rawRes = await this._ifaceProxy[methodName](...args.map(BusHelper.prepareMethodParam))
     return rawRes
   }
 
@@ -68,6 +70,17 @@ class BusHelper {
       children.add(sub)
     }
     return Array.from(children.values())
+  }
+
+  static prepareMethodParam(param){
+    const outParam = {}
+
+    for(const key in param){
+      const [signature, value] = param[key]
+      outParam[key] = new Variant(signature, value)
+    }
+
+    return outParam
   }
 }
 

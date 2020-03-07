@@ -1,4 +1,4 @@
-const {systemBus: createSystemBus} = require('dbus-next');
+const {systemBus: createSystemBus, Variant} = require('dbus-next');
 const BusHelper = require('../src/BusHelper')
 
 let dbus;
@@ -79,4 +79,20 @@ test('disableProps', async () => {
 
   await expect(bus.props()).rejects.toThrow()
   await expect(bus.prop('Test')).rejects.toThrow()
+})
+
+test("prepareMethodParam", () => {
+  const param = {
+    a: ['s', 'bar'],
+    b: ['n', 100],
+    c: ['b', false]
+  }
+
+  const expected = {
+    a: new Variant('s', 'bar'),
+    b: new Variant('n', 100),
+    c: new Variant('b', false),
+  }
+
+  expect(BusHelper.prepareMethodParam(param)).toEqual(expected)
 })
