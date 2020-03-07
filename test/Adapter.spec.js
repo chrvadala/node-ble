@@ -45,6 +45,8 @@ test("discovering methods", async () => {
   await expect(adapter.startDiscovery()).resolves.toBeUndefined()
   expect(adapter.helper.callMethod).toHaveBeenLastCalledWith('StartDiscovery')
   await expect(adapter.stopDiscovery()).rejects.toThrow('No discovery started')
+  expect(adapter.helper.callMethod).toHaveBeenCalledTimes(2)
+  adapter.helper.callMethod.mockClear()
 
 
   isDiscovering = true
@@ -52,7 +54,7 @@ test("discovering methods", async () => {
   expect(adapter.helper.callMethod).toHaveBeenLastCalledWith('StopDiscovery')
   await expect(adapter.startDiscovery()).rejects.toThrow('Discovery already in progress')
 
-  expect(adapter.helper.callMethod).toHaveBeenCalledTimes(2)
+  expect(adapter.helper.callMethod).toHaveBeenCalledTimes(1)
 })
 
 test("devices", async () => {

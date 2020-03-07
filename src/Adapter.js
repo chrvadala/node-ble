@@ -39,6 +39,10 @@ class Adapter {
     if (await this.isDiscovering()) {
       throw new Error('Discovery already in progress')
     }
+
+    await this.helper.callMethod("SetDiscoveryFilter", {
+      Transport: ["s", "le"],
+    })
     await this.helper.callMethod('StartDiscovery')
   }
 

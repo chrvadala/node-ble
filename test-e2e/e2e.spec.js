@@ -36,11 +36,6 @@ test('adapter', async () => {
 test('device connection', async () => {
   const adapter = await bluetooth.defaultAdapter()
 
-  //WORKAROUND: set filters
-  await adapter.helper.callMethod("SetDiscoveryFilter", {
-    Transport: new Variant("s", "le"),
-  })
-
   if (!await adapter.isDiscovering()) await adapter.startDiscovery()
 
   const device = await adapter.waitDevice(TEST_DEVICE)
