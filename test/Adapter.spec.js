@@ -84,3 +84,58 @@ test("getDevice", async () => {
   await expect(adapter.getDevice('11:11:11:11:11:11')).resolves.toBeInstanceOf(Device)
   expect(Device).toHaveBeenCalledWith(dbus, 'hci0', 'dev_11_11_11_11_11_11')
 })
+
+describe("waitDevice", () => {
+  test("immediately found", async () => {
+    const adapter = new Adapter(dbus, 'hci0')
+
+    adapter.helper.children.mockResolvedValue([
+      'dev_11_11_11_11_11_11',
+      'dev_22_22_22_22_22_22',
+      'dev_33_33_33_33_33_33',
+    ])
+
+    await expect(adapter.waitDevice('11:11:11:11:11:11')).resolves.toBeInstanceOf(Device)
+  })
+
+  test("found after a while", async () => {
+    jest.useFakeTimers()
+
+    const adapter = new Adapter(dbus, 'hci0')
+
+    adapter.helper.children.mockResolvedValueOnce([])
+    adapter.helper.children.mockResolvedValueOnce([])
+    adapter.helper.children.mockResolvedValueOnce([])
+    adapter.helper.children.mockResolvedValueOnce([
+      'dev_11_11_11_11_11_11',
+      'dev_22_22_22_22_22_22',
+      'dev_33_33_33_33_33_33',
+    ])
+
+    const res = expect(adapter.waitDevice('22:22:22:22:22:22', 90 * 1000, 500)).resolves.toBeInstanceOf(Device)
+
+    jest.advanceTimersByTime(2000);
+    expect(adapter.helper.children).toHaveBeenCalledTimes(4)
+
+    return res
+  })
+
+  test("fail for timeout", async () => {
+    jest.useFakeTimers()
+
+    const adapter = new Adapter(dbus, 'hci0')
+
+    adapter.helper.children.mockResolvedValue([
+      'dev_11_11_11_11_11_11',
+      'dev_22_22_22_22_22_22',
+      'dev_33_33_33_33_33_33',
+    ])
+
+    const res = expect(adapter.waitDevice('44:44:44:44:44:44', 2 * 1000, 500)).rejects.toThrow()
+
+    jest.advanceTimersByTime(2000);
+    expect(adapter.helper.children).toHaveBeenCalledTimes(4)
+
+    return res
+  })
+})

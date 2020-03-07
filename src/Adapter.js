@@ -1,6 +1,9 @@
 const Device = require('./Device')
 const BusHelper = require('./BusHelper')
 
+const DEFAULT_TIMEOUT = 2 * 60 * 1000
+const DEFAULT_DISCOVERY_INTERVAL = 1000
+
 class Adapter {
   constructor(dbus, adapter) {
     this.dbus = dbus
@@ -60,6 +63,44 @@ class Adapter {
     }
 
     return new Device(this.dbus, this.adapter, serializedUUID)
+  }
+
+  async waitDevice(uuid, timeout = DEFAULT_TIMEOUT, discoveryInterval = DEFAULT_DISCOVERY_INTERVAL) {
+    //this should be optimized subscribing InterfacesAdded signal
+
+    const cancellable = []
+    const discoveryHandler = new Promise((resolve, reject) => {
+      let check = () => {
+        this.getDevice(uuid)
+          .then(device => {
+            resolve(device)
+          })
+          .catch(e => {
+            if (e.message !== 'Device not found') {
+              return e
+            }
+          })
+      };
+
+      const handler = setInterval(check, discoveryInterval)
+      cancellable.push(() => clearInterval(handler))
+    })
+
+    const timeoutHandler = new Promise(((resolve, reject) => {
+      const handler = setTimeout(() => {
+        reject(new Error('operation timed out'))
+      }, timeout)
+
+      cancellable.push(() => clearTimeout(handler))
+    }))
+
+
+    const device = await Promise.race([discoveryHandler, timeoutHandler])
+
+    for (const cancel of cancellable) {
+      cancel()
+    }
+    return device
   }
 
   async toString() {
