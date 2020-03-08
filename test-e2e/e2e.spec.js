@@ -1,6 +1,4 @@
 const {createBluetooth} = require('..')
-let dbus = require('dbus-next');
-let Variant = dbus.Variant;
 
 const TEST_DEVICE = process.env.TEST_DEVICE
 
