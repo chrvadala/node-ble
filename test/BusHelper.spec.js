@@ -1,42 +1,48 @@
+const TEST_NAME = 'org.test'
+const TEST_OBJECT = '/org/example'
+const TEST_IFACE = 'org.test.iface'
+
 const {systemBus: createSystemBus, Variant} = require('dbus-next');
 const BusHelper = require('../src/BusHelper')
+const TestInterface = require('./__interfaces/TestInterface')
 
-let dbus;
+let dbus, iface;
 
-beforeAll(() => dbus = createSystemBus())
-afterAll(async () => await dbus.disconnect())
+beforeAll(async () => {
+  dbus = createSystemBus();
+  await dbus.requestName(TEST_NAME);
+
+  iface = new TestInterface(TEST_IFACE);
+  dbus.export(TEST_OBJECT, iface);
+})
+
+afterAll(async () => {
+  dbus.unexport(TEST_OBJECT, iface);
+  await dbus.releaseName(TEST_NAME);
+  await dbus.disconnect();
+})
 
 test('props/prop', async () => {
-  const TEST_PROP = 'KernelName'
-  const TEST_PROP_VALUE = 'Linux'
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
 
-  const bus = new BusHelper(
-    dbus,
-    'org.freedesktop.hostname1',  //service
-    '/org/freedesktop/hostname1', // object
-    'org.freedesktop.hostname1'   // iface
-  )
+  const prop = await helper.prop('SimpleProperty')
+  expect(prop).toEqual('bar')
 
+  const props = await helper.props()
+  expect(props).toEqual({
+    SimpleProperty: 'bar',
+    VirtualProperty: "foo"
+  })
 
-  const props = await bus.props()
-  expect(props[TEST_PROP]).toEqual(TEST_PROP_VALUE)
-
-  const prop = await bus.prop(TEST_PROP)
-  expect(prop).toEqual(TEST_PROP_VALUE)
+  await helper.set('SimpleProperty', new Variant('s', 'abc')) //TODO
+  await expect(helper.prop('SimpleProperty')).resolves.toEqual('abc')
 })
 
 test('callMethod', async () => {
-  const bus = new BusHelper(
-    dbus,
-    'org.freedesktop.hostname1', //service
-    '/org',                      // object
-    'org.freedesktop.DBus.Peer'  // iface
-  )
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
 
-  await bus.callMethod('Ping')
-
-  const res = await bus.callMethod('GetMachineId')
-  expect(typeof res).toBe('string')
+  const res = await helper.callMethod('Echo', 'hello')
+  expect(res).toBe('>>hello')
 })
 
 test('buildChildren', () => {
@@ -55,30 +61,30 @@ test('buildChildren', () => {
 })
 
 test('children', async () => {
-  const bus = new BusHelper(
-    dbus,
-    'org.freedesktop.hostname1',          //service
-    '/org',                               // object
-    'org.freedesktop.DBus.Introspectable' // iface
-  )
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
 
-  const children = await bus.children()
-  expect(children).toEqual(['freedesktop'])
+  const a = new TestInterface(TEST_IFACE)
+  dbus.export(`${TEST_OBJECT}/bar`, a)
+  dbus.export(`${TEST_OBJECT}/foo`, a)
+  dbus.export(`${TEST_OBJECT}/foo/abc`, a)
+  dbus.export(`${TEST_OBJECT}/foo/abc/def`, a)
+
+  const children = await helper.children()
+  expect(children).toEqual(['bar', 'foo'])
+
+  dbus.unexport(`${TEST_OBJECT}/bar`, a)
+  dbus.unexport(`${TEST_OBJECT}/foo`, a)
+  dbus.unexport(`${TEST_OBJECT}/foo/abc`, a)
+  dbus.unexport(`${TEST_OBJECT}/foo/abc/def`, a)
 })
 
 test('disableProps', async () => {
-  const bus = new BusHelper(
-    dbus,
-    'org.bluez',              // service
-    '/org/bluez',             // object
-    'org.bluez.AgentManager1', // iface
-    {useProps: false}
-  )
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, {useProps: false})
 
-  expect(Array.isArray(await bus.children())).toBe(true)
+  await expect(helper.callMethod('Echo', 'hello')).resolves.toEqual('>>hello')
 
-  await expect(bus.props()).rejects.toThrow()
-  await expect(bus.prop('Test')).rejects.toThrow()
+  await expect(helper.props()).rejects.toThrow()
+  await expect(helper.prop('Test')).rejects.toThrow()
 })
 
 test("prepareMethodParam", () => {
@@ -89,10 +95,23 @@ test("prepareMethodParam", () => {
   }
 
   const expected = {
-    a: new Variant('s', 'bar'),
+    a: new Variant('s', 'bar'), //TODO: remove Variant
     b: new Variant('n', 100),
     c: new Variant('b', false),
   }
 
   expect(BusHelper.prepareMethodParam(param)).toEqual(expected)
+  expect(BusHelper.prepareMethodParam('bar')).toEqual('bar')
+})
+
+test("waitPropChange", async () => {
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
+
+  const res = helper.waitPropChange('VirtualProperty')
+  await helper.set('VirtualProperty', new Variant('s', 'hello'))
+  await expect(res).resolves.toEqual('hello')
+
+  const res2 = helper.waitPropChange('VirtualProperty')
+  await helper.set('VirtualProperty', new Variant('s', 'byebye'))
+  await expect(res2).resolves.toEqual('byebye')
 })

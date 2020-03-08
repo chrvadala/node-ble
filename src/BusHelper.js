@@ -45,6 +45,28 @@ class BusHelper {
     return rawProp.value
   }
 
+  async set(propName, value) {
+    if (!this.options.useProps) throw new Error('props not available')
+    await this._prepare()
+    await this._propsProxy.Set(this.iface, propName, value)
+  }
+
+  async waitPropChange(propName) {
+    await this._prepare()
+    return await new Promise((resolve) => {
+      const cb = (iface, changedProps, invalidated) => {
+        // console.log('changed props on %s -> %o', iface, changedProps)
+
+        if (!(iface === this.iface && (propName in changedProps))) return
+
+        resolve(changedProps[propName].value)
+        this._propsProxy.off('PropertiesChanged', cb)
+      }
+
+      this._propsProxy.on('PropertiesChanged', cb)
+    })
+  }
+
   async children() {
     this._ready = false //WORKAROUND: it forces to construct a new ProxyObject
     await this._prepare()
@@ -72,10 +94,12 @@ class BusHelper {
     return Array.from(children.values())
   }
 
-  static prepareMethodParam(param){
+  static prepareMethodParam(param) {
+    if (typeof param === 'string') return param
+
     const outParam = {}
 
-    for(const key in param){
+    for (const key in param) {
       const [signature, value] = param[key]
       outParam[key] = new Variant(signature, value)
     }
