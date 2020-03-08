@@ -31,20 +31,22 @@ test('adapter', async () => {
   await adapter.stopDiscovery()
 })
 
-test('device connection', async () => {
+test.only('gatt e2e', async () => {
   const adapter = await bluetooth.defaultAdapter()
 
   if (!await adapter.isDiscovering()) await adapter.startDiscovery()
 
   const device = await adapter.waitDevice(TEST_DEVICE)
 
-  const string = await device.toString()
-
-  expect(typeof string).toBe('string')
-
-  console.log({device: string})
+  const deviceName = await device.toString()
+  expect(typeof deviceName).toBe('string')
+  console.log({deviceName})
 
   await device.connect()
 
+  const gattServer = await device.gatt()
+  const services = await gattServer.services()
+  console.log({services})
 
+  await device.disconnect()
 }, 40 * 1000)
