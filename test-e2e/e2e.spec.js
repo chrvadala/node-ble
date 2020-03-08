@@ -43,4 +43,8 @@ test('device connection', async () => {
   expect(typeof string).toBe('string')
 
   console.log({device: string})
-}, 20 * 1000)
+
+  await device.connect()
+
+
+}, 40 * 1000)

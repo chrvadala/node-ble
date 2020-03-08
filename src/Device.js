@@ -1,4 +1,5 @@
 const BusHelper = require('./BusHelper')
+const GattServer = require('./GattServer')
 
 class Device {
   constructor(dbus, adapter, device) {
@@ -44,8 +45,18 @@ class Device {
     return await this.helper.callMethod('CancelPair')
   }
 
-  async gattConnect() {
-    //TODO
+  async connect() {
+    await this.helper.callMethod('Connect')
+  }
+
+  async disconnect() {
+    await this.helper.callMethod('Disconnect')
+  }
+
+  async gatt() {
+    const gattServer = new GattServer(this.dbus, this.adapter, this.device)
+    await gattServer.init()
+    return gattServer
   }
 
   async toString() {

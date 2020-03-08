@@ -1,8 +1,10 @@
 jest.mock('../src/BusHelper');
+jest.mock('../src/GattServer')
 
 const dbus = Symbol()
 
 const Device = require('../src/Device')
+const GattServer = require('../src/GattServer')
 
 test("props", async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
@@ -39,4 +41,25 @@ test("pairing", async () => {
   expect(device.helper.callMethod).toHaveBeenLastCalledWith('CancelPair')
 
   expect(device.helper.callMethod).toHaveBeenCalledTimes(2)
+})
+
+test("connection", async () => {
+  const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+
+  await expect(device.connect()).resolves.toBeUndefined()
+  expect(device.helper.callMethod).toHaveBeenLastCalledWith('Connect')
+
+  await expect(device.disconnect()).resolves.toBeUndefined()
+  expect(device.helper.callMethod).toHaveBeenLastCalledWith('Disconnect')
+
+  expect(device.helper.callMethod).toHaveBeenCalledTimes(2)
+})
+
+test("gatt server initialization", async () => {
+  const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+
+  const gattServer = await device.gatt()
+
+  expect(GattServer).toHaveBeenCalledWith(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+  expect(gattServer.init).toHaveBeenCalledTimes(1)
 })
