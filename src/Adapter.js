@@ -1,5 +1,6 @@
 const Device = require('./Device')
 const BusHelper = require('./BusHelper')
+const buildTypedValue = require('./buildTypedValue')
 
 const DEFAULT_TIMEOUT = 2 * 60 * 1000
 const DEFAULT_DISCOVERY_INTERVAL = 1000
@@ -41,7 +42,7 @@ class Adapter {
     }
 
     await this.helper.callMethod("SetDiscoveryFilter", {
-      Transport: ["s", "le"],
+      Transport: buildTypedValue('string', 'le'),
     })
     await this.helper.callMethod('StartDiscovery')
   }

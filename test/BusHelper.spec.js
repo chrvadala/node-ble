@@ -2,9 +2,10 @@ const TEST_NAME = 'org.test'
 const TEST_OBJECT = '/org/example'
 const TEST_IFACE = 'org.test.iface'
 
-const {systemBus: createSystemBus, Variant} = require('dbus-next');
+const {systemBus: createSystemBus} = require('dbus-next');
 const BusHelper = require('../src/BusHelper')
 const TestInterface = require('./__interfaces/TestInterface')
+const buildTypedValue = require('../src/buildTypedValue')
 
 let dbus, iface;
 
@@ -34,7 +35,7 @@ test('props/prop', async () => {
     VirtualProperty: "foo"
   })
 
-  await helper.set('SimpleProperty', new Variant('s', 'abc')) //TODO
+  await helper.set('SimpleProperty', buildTypedValue('string', 'abc'))
   await expect(helper.prop('SimpleProperty')).resolves.toEqual('abc')
 })
 
@@ -87,31 +88,14 @@ test('disableProps', async () => {
   await expect(helper.prop('Test')).rejects.toThrow()
 })
 
-test("prepareMethodParam", () => {
-  const param = {
-    a: ['s', 'bar'],
-    b: ['n', 100],
-    c: ['b', false]
-  }
-
-  const expected = {
-    a: new Variant('s', 'bar'), //TODO: remove Variant
-    b: new Variant('n', 100),
-    c: new Variant('b', false),
-  }
-
-  expect(BusHelper.prepareMethodParam(param)).toEqual(expected)
-  expect(BusHelper.prepareMethodParam('bar')).toEqual('bar')
-})
-
 test("waitPropChange", async () => {
   const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
 
   const res = helper.waitPropChange('VirtualProperty')
-  await helper.set('VirtualProperty', new Variant('s', 'hello'))
+  await helper.set('VirtualProperty', buildTypedValue('string', 'hello'))
   await expect(res).resolves.toEqual('hello')
 
   const res2 = helper.waitPropChange('VirtualProperty')
-  await helper.set('VirtualProperty', new Variant('s', 'byebye'))
+  await helper.set('VirtualProperty', buildTypedValue('string', 'byebye'))
   await expect(res2).resolves.toEqual('byebye')
 })
