@@ -7,7 +7,7 @@ class GattCharacteristic {
     this.adapter = adapter
     this.device = device
     this.service = service
-    this.characteristics = characteristic
+    this.characteristic = characteristic
     this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}/${service}/${characteristic}`, 'org.bluez.GattCharacteristic1')
   }
 
