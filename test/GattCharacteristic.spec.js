@@ -30,9 +30,9 @@ test("read/write", async () => {
 test("notify", async ()=> {
   const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
 
-  await characteristic.startNotify()
+  await characteristic.startNotifications()
   expect(characteristic.helper.callMethod).toHaveBeenCalledWith('StartNotify')
 
-  await characteristic.stopNotify()
+  await characteristic.stopNotifications()
   expect(characteristic.helper.callMethod).toHaveBeenCalledWith('StopNotify')
 })

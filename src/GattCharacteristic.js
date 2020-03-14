@@ -43,11 +43,11 @@ class GattCharacteristic {
     await this.helper.callMethod('WriteValue', data, options)
   }
 
-  async startNotify() {
+  async startNotifications() {
     await this.helper.callMethod('StartNotify')
   }
 
-  async stopNotify() {
+  async stopNotifications() {
     await this.helper.callMethod('StopNotify')
   }
 
