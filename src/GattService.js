@@ -23,7 +23,7 @@ class GattService {
     }
   }
 
-  async primary() {
+  async isPrimary() {
     return await this.helper.prop('Primary')
   }
 

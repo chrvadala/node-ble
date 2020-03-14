@@ -46,4 +46,14 @@ test("init", async () => {
   await expect(characteristic._characteristic).toEqual('char000b')
 })
 
+test("props", async () => {
+  const service = new GattService(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'service0006')
+  service.helper.prop.mockImplementation((value) => Promise.resolve(({
+    Primary: true,
+    UUID: 'abcdef',
+  }[value])))
 
+  await expect(service.getUUID()).resolves.toEqual('abcdef')
+  await expect(service.isPrimary()).resolves.toEqual(true)
+  await expect(service.toString()).resolves.toEqual('abcdef')
+})
