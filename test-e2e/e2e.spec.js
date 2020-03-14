@@ -1,6 +1,7 @@
 const {createBluetooth} = require('..')
 
 const TEST_DEVICE = process.env.TEST_DEVICE
+const TEST_SERVICE = process.env.TEST_SERVICE
 
 let bluetooth, destroy
 
@@ -9,44 +10,52 @@ afterAll(() => destroy())
 
 test("check properly configured", () => {
   expect(TEST_DEVICE).not.toBeUndefined()
+  expect(TEST_SERVICE).not.toBeUndefined()
 })
 
-test('get adapters', async () => {
-  const adapters = await bluetooth.adapters()
-  expect(adapters).toBeInstanceOf(Array)
+describe('gatt e2e', () => {
+  test("get adapters", async ()=>{
+    const adapters = await bluetooth.adapters()
+    console.log({adapters})
+  })
+
+  let adapter;
+  test("get adapter", async () => {
+    adapter = await bluetooth.defaultAdapter()
+  })
+
+  test("discovery", async () => {
+    if (!await adapter.isDiscovering()) {
+      await adapter.startDiscovery()
+    }
+  })
+
+  let device;
+  test("get device", async () => {
+    device = await adapter.waitDevice(TEST_DEVICE)
+    const deviceName = await device.toString()
+    expect(typeof deviceName).toBe('string')
+    console.log({deviceName})
+  }, 20 * 1000) //increases test secs
+
+  test("connect", async () => {
+    await device.connect()
+  })
+
+  let gattServer
+  test("get gatt", async () => {
+    gattServer = await device.gatt()
+    const services = await gattServer.services()
+    console.log({services})
+  })
+
+  let service
+  test("get service", async () => {
+    service = await gattServer.getPrimaryService(TEST_SERVICE)
+  })
+
+  test("disconnect", async () => {
+    await adapter.stopDiscovery()
+    await device.disconnect()
+  })
 })
-
-test('adapter', async () => {
-  const adapter = await bluetooth.defaultAdapter()
-  if (await adapter.isDiscovering()) await adapter.stopDiscovery() //makes consistent situation
-
-  await expect(adapter.isDiscovering()).resolves.toEqual(false)
-  await adapter.startDiscovery()
-  await expect(adapter.isDiscovering()).resolves.toEqual(true)
-
-  const devices = await adapter.devices()
-  expect(devices).toBeInstanceOf(Array)
-  console.log({devices})
-
-  await adapter.stopDiscovery()
-})
-
-test.only('gatt e2e', async () => {
-  const adapter = await bluetooth.defaultAdapter()
-
-  if (!await adapter.isDiscovering()) await adapter.startDiscovery()
-
-  const device = await adapter.waitDevice(TEST_DEVICE)
-
-  const deviceName = await device.toString()
-  expect(typeof deviceName).toBe('string')
-  console.log({deviceName})
-
-  await device.connect()
-
-  const gattServer = await device.gatt()
-  const services = await gattServer.services()
-  console.log({services})
-
-  await device.disconnect()
-}, 40 * 1000)
