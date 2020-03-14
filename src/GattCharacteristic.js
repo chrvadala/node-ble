@@ -1,4 +1,5 @@
 const BusHelper = require('./BusHelper')
+const buildTypedValue = require('./buildTypedValue')
 
 class GattCharacteristic {
   constructor(dbus, adapter, device, service, characteristic) {
@@ -18,16 +19,28 @@ class GattCharacteristic {
     return await this.helper.prop('Flags')
   }
 
-  async isNotifying(){
+  async isNotifying() {
     return await this.helper.prop('Notifying')
   }
 
-  async readValue() {
-    return await this.helper.callMethod('ReadValue')
+  async readValue(offset = 0) {
+    const options = {
+      offset: buildTypedValue('uint16', offset)
+    }
+    const payload = await this.helper.callMethod('ReadValue', options)
+    return Buffer.from(payload)
   }
 
-  async writeValue(value) {
-    //TODO
+  async writeValue(value, offset = 0) {
+    if (!Buffer.isBuffer(value)) {
+      throw new Error('Only buffers can be wrote')
+    }
+    const options = {
+      offset: buildTypedValue('uint16', offset),
+      type: buildTypedValue('string', 'reliable'),
+    }
+    const {data} = value.toJSON()
+    await this.helper.callMethod('WriteValue', data, options)
   }
 
   async startNotify() {

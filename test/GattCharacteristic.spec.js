@@ -16,4 +16,23 @@ test("props", async () => {
   await expect(characteristic.toString()).resolves.toEqual('foobar')
 })
 
-test.todo("method")
+test("read/write", async () => {
+  const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
+
+  await expect(characteristic.writeValue('not_a_buffer')).rejects.toThrow('Only buffers can be wrote')
+  await expect(characteristic.writeValue(Buffer.from("hello"))).resolves.toBeUndefined()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), expect.anything())
+
+  characteristic.helper.callMethod.mockResolvedValueOnce([255, 100, 0])
+  await expect(characteristic.readValue()).resolves.toEqual(Buffer.from([255, 100, 0]))
+})
+
+test("notify", async ()=> {
+  const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
+
+  await characteristic.startNotify()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('StartNotify')
+
+  await characteristic.stopNotify()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('StopNotify')
+})
