@@ -9,6 +9,7 @@ jest.mock('../src/GattService', () => {
   class GattServiceMock {
     constructor(dbus, adapter, device, service) {
       this._service = service
+      this.init = jest.fn()
     }
 
     async getUUID() {

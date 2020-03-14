@@ -12,6 +12,7 @@ class GattServer {
   }
 
   async init() {
+    //TODO add lock to avoid race conditions
     this._services = {}
 
     const servicesResolved = await this.helper.prop('ServicesResolved')
@@ -23,6 +24,7 @@ class GattServer {
     for (const s of children) {
       let service = new GattService(this.dbus, this.adapter, this.device, s)
       let uuid = await service.getUUID()
+      await service.init()
       this._services[uuid] = service
     }
   }
