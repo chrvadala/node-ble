@@ -19,6 +19,8 @@ test("check properly configured", () => {
   expect(TEST_DEVICE).not.toBeUndefined()
   expect(TEST_SERVICE).not.toBeUndefined()
   expect(TEST_CHARACTERISTIC).not.toBeUndefined()
+  expect(TEST_NOTIFY_SERVICE).not.toBeUndefined()
+  expect(TEST_NOTIFY_CHARACTERISTIC).not.toBeUndefined()
 })
 
 describe('gatt e2e', () => {
