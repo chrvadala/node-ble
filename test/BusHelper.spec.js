@@ -99,3 +99,19 @@ test("waitPropChange", async () => {
   await helper.set('VirtualProperty', buildTypedValue('string', 'byebye'))
   await expect(res2).resolves.toEqual('byebye')
 })
+
+test("propsEvents", async () => {
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, {usePropsEvents: true})
+
+  const res = new Promise((resolve) => {
+    const cb = nextProps => {
+      resolve(nextProps)
+      helper.off('PropertiesChanged', cb)
+    }
+
+    helper.on('PropertiesChanged', cb)
+  })
+
+  await helper.set('VirtualProperty', buildTypedValue('string', 'bar'))
+  await expect(res).resolves.toMatchObject({VirtualProperty: {signature: 's', value: 'bar'}})
+})

@@ -1,5 +1,14 @@
-class BusHelper {
+const EventEmitter = require('events');
+
+const DEFAULT_OPTIONS = {
+  useProps: true,
+  usePropsEvents: false,
+}
+
+class BusHelper extends EventEmitter {
   constructor(dbus, service, object, iface, options = {}) {
+    super()
+
     this.service = service
     this.object = object
     this.iface = iface
@@ -7,7 +16,7 @@ class BusHelper {
     this.dbus = dbus
 
     this.options = {
-      useProps: true,
+      ...DEFAULT_OPTIONS,
       ...options,
     }
 
@@ -21,7 +30,19 @@ class BusHelper {
     if (this._ready) return
     const objectProxy = this._objectProxy = await this.dbus.getProxyObject(this.service, this.object);
     this._ifaceProxy = await objectProxy.getInterface(this.iface)
-    if (this.options.useProps) this._propsProxy = await objectProxy.getInterface('org.freedesktop.DBus.Properties')
+
+    if (this.options.useProps) {
+      this._propsProxy = await objectProxy.getInterface('org.freedesktop.DBus.Properties')
+    }
+
+    if (this.options.useProps && this.options.usePropsEvents) {
+      this._propsProxy.on('PropertiesChanged', (iface, changedProps, invalidated) => {
+        if (iface === this.iface) {
+          this.emit('PropertiesChanged', changedProps)
+        }
+      })
+    }
+
     this._ready = true
   }
 
@@ -73,7 +94,7 @@ class BusHelper {
 
   async callMethod(methodName, ...args) {
     await this._prepare()
-    return  await this._ifaceProxy[methodName](...args)
+    return await this._ifaceProxy[methodName](...args)
   }
 
   static buildChildren(path, nodes) {
