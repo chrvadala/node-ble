@@ -4,6 +4,11 @@ const TEST_DEVICE = process.env.TEST_DEVICE
 const TEST_SERVICE = process.env.TEST_SERVICE
 const TEST_CHARACTERISTIC = process.env.TEST_CHARACTERISTIC
 
+const {
+  TEST_NOTIFY_SERVICE,
+  TEST_NOTIFY_CHARACTERISTIC,
+} = process.env
+
 let bluetooth, destroy
 
 beforeAll(() => ({bluetooth, destroy} = createBluetooth()))
@@ -73,6 +78,28 @@ describe('gatt e2e', () => {
     const value = await characteristic.readValue()
     expect(value).toEqual(string)
     console.log({value: value.toString()})
+  })
+
+  test("notify", async () => {
+    const notifiableService = await gattServer.getPrimaryService(TEST_NOTIFY_SERVICE)
+    const notifiableCharacteristic = await notifiableService.getCharacteristic(TEST_NOTIFY_CHARACTERISTIC)
+
+    console.log({
+      notifiableService: notifiableCharacteristic.service,
+      notifiableCharacteristic: notifiableCharacteristic.characteristic
+    })
+    await notifiableCharacteristic.startNotifications()
+
+    const res = new Promise(resolve => {
+      notifiableCharacteristic.on('valuechanged', buffer => {
+        console.log({notifiedBuffer: buffer})
+        resolve(buffer)
+      })
+    })
+
+    await expect(res).resolves.toBeInstanceOf(Buffer)
+
+    await notifiableCharacteristic.stopNotifications()
   })
 
   test("disconnect", async () => {

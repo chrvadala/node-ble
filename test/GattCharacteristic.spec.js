@@ -1,4 +1,20 @@
-jest.mock('../src/BusHelper')
+jest.doMock('../src/BusHelper', () => {
+  const EventEmitter = jest.requireActual('events')
+
+  return class BusHelperMock extends EventEmitter {
+    constructor() {
+      super();
+      this._prepare = jest.fn()
+      this.props = jest.fn()
+      this.prop = jest.fn()
+      this.set = jest.fn()
+      this.waitPropChange = jest.fn()
+      this.children = jest.fn()
+      this.callMethod = jest.fn()
+    }
+  }
+})
+const buildTypedValue = require('../src/buildTypedValue')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol()
 
@@ -27,7 +43,7 @@ test("read/write", async () => {
   await expect(characteristic.readValue()).resolves.toEqual(Buffer.from([255, 100, 0]))
 })
 
-test("notify", async ()=> {
+test("notify", async () => {
   const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
 
   await characteristic.startNotifications()
@@ -35,4 +51,27 @@ test("notify", async ()=> {
 
   await characteristic.stopNotifications()
   expect(characteristic.helper.callMethod).toHaveBeenCalledWith('StopNotify')
+})
+
+test("event:valuechanged", async () => {
+  const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
+
+  await characteristic.startNotifications()
+
+  const res = new Promise((resolve) => {
+    const cb = (value) => {
+      characteristic.off('valuechanged', cb)
+      resolve(value)
+    }
+    characteristic.on('valuechanged', cb)
+
+  })
+
+  characteristic.helper.emit('PropertiesChanged',
+    {Value: {signature: 'ay', value: [0x62, 0x61, 0x72]}}, //means bar
+  )
+
+  await expect(res).resolves.toEqual(Buffer.from('bar'))
+
+  await characteristic.stopNotifications()
 })

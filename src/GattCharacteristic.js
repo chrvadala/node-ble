@@ -1,14 +1,16 @@
+const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
 const buildTypedValue = require('./buildTypedValue')
 
-class GattCharacteristic {
+class GattCharacteristic extends EventEmitter {
   constructor(dbus, adapter, device, service, characteristic) {
+    super()
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
     this.service = service
     this.characteristic = characteristic
-    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}/${service}/${characteristic}`, 'org.bluez.GattCharacteristic1')
+    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}/${service}/${characteristic}`, 'org.bluez.GattCharacteristic1', {usePropsEvents: true})
   }
 
   async getUUID() {
@@ -45,10 +47,20 @@ class GattCharacteristic {
 
   async startNotifications() {
     await this.helper.callMethod('StartNotify')
+
+    const cb = (propertiesChanged) => {
+      if ('Value' in propertiesChanged) {
+        const {value} = propertiesChanged['Value']
+        this.emit('valuechanged', Buffer.from(value))
+      }
+    }
+
+    this.helper.on('PropertiesChanged', cb)
   }
 
   async stopNotifications() {
     await this.helper.callMethod('StopNotify')
+    this.helper.removeAllListeners('PropertiesChanged') //might be improved
   }
 
   async toString() {
