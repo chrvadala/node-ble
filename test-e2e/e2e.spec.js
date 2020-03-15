@@ -1,12 +1,13 @@
 const {createBluetooth} = require('..')
 
-const TEST_DEVICE = process.env.TEST_DEVICE
-const TEST_SERVICE = process.env.TEST_SERVICE
-const TEST_CHARACTERISTIC = process.env.TEST_CHARACTERISTIC
-
 const {
-  TEST_NOTIFY_SERVICE,
-  TEST_NOTIFY_CHARACTERISTIC,
+  TEST_DEVICE,                //ADDRESS OF A BLE TEST DEVICE
+
+  TEST_SERVICE,               //FOR READ/WRITE TESTING
+  TEST_CHARACTERISTIC,        //FOR READ/WRITE TESTING
+
+  TEST_NOTIFY_SERVICE,        //FOR NOTIFY TESTING
+  TEST_NOTIFY_CHARACTERISTIC, //FOR NOTIFY TESTING
 } = process.env
 
 let bluetooth, destroy
@@ -59,16 +60,24 @@ describe('gatt e2e', () => {
   let service
   test("get service", async () => {
     service = await gattServer.getPrimaryService(TEST_SERVICE)
-    const characteristics = await service.characteristics()
     const uuid = await service.getUUID()
-    console.log({service: uuid, characteristics})
+    expect(uuid).toEqual(TEST_SERVICE)
+    console.log({
+      serviceUUID: uuid,
+      service: service.service,
+      characteristics: await service.characteristics(),
+    })
   })
 
   let characteristic
   test("get characteristic", async () => {
     characteristic = await service.getCharacteristic(TEST_CHARACTERISTIC)
     const uuid = await characteristic.getUUID()
-    console.log({characteristic: uuid})
+    expect(uuid).toEqual(TEST_CHARACTERISTIC)
+    console.log({
+      characteristic: characteristic.characteristic,
+      characteristicUUID: uuid,
+    })
   })
 
   test("read/write value", async () => {
@@ -85,8 +94,13 @@ describe('gatt e2e', () => {
     const notifiableCharacteristic = await notifiableService.getCharacteristic(TEST_NOTIFY_CHARACTERISTIC)
 
     console.log({
-      notifiableService: notifiableCharacteristic.service,
-      notifiableCharacteristic: notifiableCharacteristic.characteristic
+      notifiable: {
+        service: notifiableService.service,
+        serviceUUID: await notifiableService.getUUID(),
+
+        characteristic: notifiableCharacteristic.characteristic,
+        characteristicUUID: await notifiableCharacteristic.getUUID(),
+      }
     })
     await notifiableCharacteristic.startNotifications()
 
