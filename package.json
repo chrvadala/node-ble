@@ -25,7 +25,8 @@
   "homepage": "https://github.com/chrvadala/node-ble",
   "scripts": {
     "test": "jest --testPathIgnorePatterns=e2e.spec.js",
-    "test-e2e": "jest"
+    "test:e2e": "jest",
+    "test:ci": "standard && jest"
   },
   "dependencies": {
     "dbus-next": "^0.8.2"

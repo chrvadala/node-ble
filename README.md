@@ -200,7 +200,7 @@ TEST_NOTIFY_SERVICE=0000180d-0000-1000-8000-00805f9b34fb
 TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
 ```
 ```shell script
-yarn test-e2e
+yarn test:e2e
 ```
 
 ## Changelog

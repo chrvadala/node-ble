@@ -55,7 +55,7 @@ describe('gatt e2e', () => {
     device.on('disconnect', () => console.log('disconnect'))
 
     await device.connect()
-  })
+  }, 20 * 1000)
 
   let gattServer
   test('get gatt', async () => {
