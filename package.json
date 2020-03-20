@@ -26,9 +26,9 @@
   "scripts": {
     "test": "jest --testPathIgnorePatterns=e2e.spec.js",
     "test:e2e": "jest",
-    "test:ci": "standard && jest && yarn codecov",
+    "test:ci": "standard && yarn test && yarn coveralls",
     "version": "yarn test && yarn standard",
-    "codecov": "jest --coverage && codecov"
+    "coveralls": "jest --coverage --coverageReporters=text-lcov --testPathIgnorePatterns=e2e.spec.js | coveralls"
   },
   "dependencies": {
     "dbus-next": "^0.8.2"
@@ -37,7 +37,7 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@types/jest": "^25.1.3",
-    "codecov": "^3.6.5",
+    "coveralls": "^3.0.11",
     "dotenv": "^8.2.0",
     "jest": "^25.1.0",
     "standard": "^14.3.3"
