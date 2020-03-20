@@ -82,70 +82,81 @@ const {bluetooth, destroy} = createBluetooth()
 ## `Adapter`
 | Method | Description |
 | --- | --- |
-| `Promise<String> getAddress()` |
-| `Promise<String> getAddressType()`|
-| `Promise<String> getName()`|
-| `Promise<String> getAlias()`|
-| `Promise<bool> isPowered()`|
-| `Promise<bool> isDiscovering()`|
-| `Promise<void> startDiscovery()`|
-| `Promise<void> stopDiscovery()`|
-| `Promise<String[]> devices()`|
-| `Promise<Device> getDevice(String uuid)`|
-| `Promise<Device> waitDevice(String uuid)`|
-| `Promise<String> toString()`|
-| `Promise<Device> toString()`|
+| `Promise<String> getAddress()` | The Bluetooth device address. |
+| `Promise<String> getAddressType()`| The Bluetooth  Address Type. One of `public` or `random`. |
+| `Promise<String> getName()`| The Bluetooth system name (pretty hostname). |
+| `Promise<String> getAlias()`| The Bluetooth friendly name. |
+| `Promise<bool> isPowered()`| Adapter power status. |
+| `Promise<bool> isDiscovering()`| Indicates that a device discovery procedure is active. |
+| `Promise<void> startDiscovery()`| Starts the device discovery session. |
+| `Promise<void> stopDiscovery()`| Cancel any previous StartDiscovery transaction. |
+| `Promise<String[]> devices()`| List of discovered Bluetooth Low Energy devices |
+| `Promise<Device> getDevice(String uuid)`| Returns an available Bluetooth Low Energy (`waitDevice` is preferred)|
+| `Promise<Device> waitDevice(String uuid)`| Returns a Bluetooth Low Energy device as soon as it is available |
+| `Promise<String> toString()`| User friendly adapter name |
 
-## `Device`
+## `Device` extends `EventEmitter`
 | Method | Description |
 | --- | --- |
-| `Promise<String> getName()` |
-| `Promise<String> getAddress()` |
-| `Promise<String> getAddressType()` |
-| `Promise<String> getAlias()` |
-| `Promise<String> getRSSI()` |
-| `Promise<String> isPaired()` |
-| `Promise<String> isConnected()` |
-| `Promise<void> pair()` |
-| `Promise<void> cancelPair()` |
-| `Promise<void> connect()` |
-| `Promise<void> disconnect()` |
-| `Promise<GattServer> gatt()` |
-| `Promise<String> toString()` |
+| `Promise<String> getName()` | The Bluetooth remote name. |
+| `Promise<String> getAddress()` | The Bluetooth device address of the remote device. |
+| `Promise<String> getAddressType()` | The Bluetooth  Address Type. One of `public` or `random`. |
+| `Promise<String> getAlias()` | The name alias for the remote device. |
+| `Promise<String> getRSSI()` | Received Signal Strength Indicator of the remote device. |
+| `Promise<String> isPaired()` | Indicates if the remote device is paired. |
+| `Promise<String> isConnected()` | Indicates if the remote device is currently connected. |
+| `Promise<void> pair()` | Connects to the remote device, initiate pairing and then retrieve GATT primary services (needs a default agent to handle wizard).|
+| `Promise<void> cancelPair()` | This method can be used to cancel a pairing operation initiated by the Pair method. |
+| `Promise<void> connect()` | This is a generic method to connect any profiles the remote device supports that can be connected to and have been flagged as auto-connectable on our side. |
+| `Promise<void> disconnect()` | This method gracefully disconnects all connected profiles and then terminates low-level ACL connection. |
+| `Promise<GattServer> gatt()` | Waits services resolving, then returns a connection to the remote Gatt Server
+| `Promise<String> toString()` | User friendly device name. |
+
+| Event | Description |
+| --- | --- |
+| `connect` | Connected to device |
+| `disconnect` | Disconnected from device |
 
 ## `GattServer`
 | Method | Description |
 | --- | --- |
-| `Promise<String[]> services()` |
-| `Promise<String[]> getPrimaryService(String uuid)` |
-| `Promise<GattService> getPrimaryService(String uuid)` |
+| `Promise<String[]> services()` | List of available services |
+| `Promise<GattService[]> getPrimaryService(String uuid)` | Returns a specific Primary Service |
 
 ## `GattService`
 | Method | Description |
 | --- | --- |
-| `Promise<bool> isPrimary()` |
-| `Promise<String> getUUID()` |
-| `Promise<String[]> characteristics()` |
-| `Promise<GattCharacteristic> getCharacteristic(String uuid)` |
-| `Promise<String> toString()` |
+| `Promise<bool> isPrimary()` | Indicates whether or not this GATT service is a	primary service. |
+| `Promise<String> getUUID()` | 128-bit service UUID. |
+| `Promise<String[]> characteristics()` | List of available characteristic UUIDs. |
+| `Promise<GattCharacteristic> getCharacteristic(String uuid)` | Returns a specific characteristic. |
+| `Promise<String> toString()` | User friendly service name. |
 
-## `GattCharacteristic`
+## `GattCharacteristic` extend `EventEmitter`
 | Method | Description |
 | --- | --- |
-| `Promise<String> getUUID()` |
-| `Promise<String[]> getFlags()` |
-| `Promise<bool> isNotifying()` |
-| `Promise<Buffer> readValue(Number offset = 0)` |
-| `Promise<Buffer> writeValue(Buffer buffer, Number offset = 0)` |
-| `Promise<void> startNotifications()` |
-| `Promise<void> stopNotifications()` |
-| `Promise<String> toString()` |
+| `Promise<String> getUUID()` | 128-bit characteristic UUID. |
+| `Promise<String[]> getFlags()` | Defines how the characteristic value can be used. |
+| `Promise<bool> isNotifying()` | True, if notifications or indications on this characteristic are currently enabled. |
+| `Promise<Buffer> readValue(Number offset = 0)` | Issues a request to read the value of the characteristic and returns the value if the operation was successful. |
+| `Promise<Buffer> writeValue(Buffer buffer, Number offset = 0)` | Issues a request to write the value of the characteristic. |
+| `Promise<void> startNotifications()` | Starts a notification session from this characteristic if it supports value notifications or indications. |
+| `Promise<void> stopNotifications()` | This method will cancel any previous StartNotify transaction. |
+| `Promise<String> toString()` | User friendly characteristic name. |
+
+| Event | Description |
+| --- | --- |
+| valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
 
 ## References
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt
+- https://webbluetoothcg.github.io/web-bluetooth - method signatures follow, when possible, WebBluetooth standards
+- https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web - method signatures follow, when possible, WebBluetooth standards
 
 ## Troubleshooting
 ### Permission Denied
