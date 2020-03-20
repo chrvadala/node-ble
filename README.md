@@ -184,7 +184,7 @@ Then `sudo systemctl restart bluetooth`
 ## Run tests
 ### Unit tests
 ```
-yarn test
+FORCE_SESSION_DBUS=1 yarn test
 ```
 
 ### End to end (e2e) tests
