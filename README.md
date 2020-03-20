@@ -17,7 +17,7 @@ yarn add node-ble
 # Example
 
 ## STEP 1: Get Adapter
-To start a Bluetooth Low Energy (BLE) connection you need a Bluetooth adapter
+To start a Bluetooth Low Energy (BLE) connection you need a Bluetooth adapter.
 
 ```javascript
 const {createBluetooth} = require('node-ble')
@@ -25,7 +25,13 @@ const {bluetooth, destroy} = createBluetooth()
 const adapter = await bluetooth.defaultAdapter()
 ```
 
-## STEP 2: Get a device, Connect and Get GATT Server
+## STEP 2: Start discovering
+In order to find a Bluetooth Low Energy device out, you have to start a discovery operation.
+```javascript
+await adapter.startDiscovery()
+```
+
+## STEP 3: Get a device, Connect and Get GATT Server
 Use an adapter to get a remote Bluetooth device, then connect to it and bind to the GATT (Generic Attribute Profile) server.
 
 ```javascript
@@ -34,7 +40,7 @@ await device.connect()
 const gattServer = await device.gatt()
 ```
 
-## STEP 3a: Read and write a characteristic
+## STEP 4a: Read and write a characteristic.
 ```javascript
 const service1 = await gattServer.getPrimaryService('uuid')
 const characteristic1 = await service1.getCharacteristic('uuid')
@@ -43,7 +49,7 @@ const buffer = await characteristic1.readValue()
 console.log(buffer)
 ```
 
-## STEP 3b: Subscribe to a characteristic
+## STEP 4b: Subscribe to a characteristic.
 ```javascript
 const service2 = await gattServer.getPrimaryService('uuid')
 const characteristic2 = await service2.getCharacteristic('uuid')
@@ -54,8 +60,8 @@ characteristic2.on('valuechanged', buffer => {
 await characteristic2.stopNotifications()
 ```
 
-### STEP 4: Disconnect
-When you have done you can disconnect and destroy the session
+### STEP 5: Disconnect
+When you have done you can disconnect and destroy the session.
 ```javascript
 await device.disconnect()
 destroy()
@@ -148,16 +154,6 @@ const {bluetooth, destroy} = createBluetooth()
 | --- | --- |
 | valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
 
-## Contributors
-- [chrvadala](https://github.com/chrvadala) (author)
-
-## References
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt
-- https://webbluetoothcg.github.io/web-bluetooth - method signatures follow, when possible, WebBluetooth standards
-- https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web - method signatures follow, when possible, WebBluetooth standards
-
 ## Troubleshooting
 ### Permission Denied
 Adds the following file into `/etc/dbus-1/system.d/bluetooth.conf`
@@ -206,3 +202,16 @@ TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
 ```shell script
 yarn test-e2e
 ```
+
+## Changelog
+- **0.x** - WIP - Work In Progress
+
+## Contributors
+- [chrvadala](https://github.com/chrvadala) (author)
+
+## References
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt
+- https://webbluetoothcg.github.io/web-bluetooth - method signatures follow, when possible, WebBluetooth standards
+- https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web - method signatures follow, when possible, WebBluetooth standards
