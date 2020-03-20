@@ -14,6 +14,7 @@ test("props", async () => {
     AddressType: 'public',
     Alias: '_alias_',
     RSSI: 100,
+    TxPower: 50,
 
     Paired: true,
     Connected: true,
@@ -24,6 +25,7 @@ test("props", async () => {
   await expect(device.getAddressType()).resolves.toEqual('public')
   await expect(device.getAlias()).resolves.toEqual('_alias_')
   await expect(device.getRSSI()).resolves.toEqual(100)
+  await expect(device.getTXPower()).resolves.toEqual(50)
 
   await expect(device.isConnected()).resolves.toEqual(true)
   await expect(device.isPaired()).resolves.toEqual(true)

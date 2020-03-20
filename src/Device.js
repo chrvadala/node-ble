@@ -29,6 +29,10 @@ class Device {
     return await this.helper.prop('RSSI')
   }
 
+  async getTXPower(){
+    return await this.helper.prop('TxPower')
+  }
+
   async isPaired() {
     return await this.helper.prop('Paired')
   }
