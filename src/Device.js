@@ -1,12 +1,14 @@
+const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
 const GattServer = require('./GattServer')
 
-class Device {
+class Device extends EventEmitter {
   constructor(dbus, adapter, device) {
+    super()
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
-    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1')
+    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1', {usePropsEvents: true})
   }
 
   async getName() {
@@ -29,7 +31,7 @@ class Device {
     return await this.helper.prop('RSSI')
   }
 
-  async getTXPower(){
+  async getTXPower() {
     return await this.helper.prop('TxPower')
   }
 
@@ -50,11 +52,24 @@ class Device {
   }
 
   async connect() {
+    const cb = (propertiesChanged) => {
+      if ('Connected' in propertiesChanged) {
+        const {value} = propertiesChanged['Connected']
+        if (value) {
+          this.emit('connect', {connected: true})
+        } else {
+          this.emit('disconnect', {connected: false})
+        }
+      }
+    }
+
+    this.helper.on('PropertiesChanged', cb)
     await this.helper.callMethod('Connect')
   }
 
   async disconnect() {
     await this.helper.callMethod('Disconnect')
+    this.helper.removeAllListeners('PropertiesChanged') //might be improved
   }
 
   async gatt() {

@@ -1,4 +1,19 @@
-jest.mock('../src/BusHelper');
+jest.doMock('../src/BusHelper', () => {
+  const EventEmitter = jest.requireActual('events')
+
+  return class BusHelperMock extends EventEmitter {
+    constructor() {
+      super();
+      this._prepare = jest.fn()
+      this.props = jest.fn()
+      this.prop = jest.fn()
+      this.set = jest.fn()
+      this.waitPropChange = jest.fn()
+      this.children = jest.fn()
+      this.callMethod = jest.fn()
+    }
+  }
+})
 jest.mock('../src/GattServer')
 
 const dbus = Symbol()
@@ -64,4 +79,30 @@ test("gatt server initialization", async () => {
 
   expect(GattServer).toHaveBeenCalledWith(dbus, 'hci0', 'dev_00_00_00_00_00_00')
   expect(gattServer.init).toHaveBeenCalledTimes(1)
+})
+
+test("event:valuechanged", async () => {
+  const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+
+  const connectedFn = jest.fn()
+  const disconnectedFn = jest.fn()
+
+  await device.connect()
+
+  device.on('connect', connectedFn)
+  device.on('disconnect', disconnectedFn)
+
+  device.helper.emit('PropertiesChanged',
+    {Connected: {signature: 'b', value: true}}
+  )
+
+  expect(connectedFn).toHaveBeenCalledWith({connected: true})
+
+  device.helper.emit('PropertiesChanged',
+    {Connected: {signature: 'b', value: false}}
+  )
+
+  expect(disconnectedFn).toHaveBeenCalledWith({connected: false})
+
+  await device.disconnect()
 })

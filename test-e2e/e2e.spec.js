@@ -49,6 +49,9 @@ describe('gatt e2e', () => {
   }, 20 * 1000) //increases test secs
 
   test("connect", async () => {
+    device.on('connect', () => console.log('connect'))
+    device.on('disconnect', () => console.log('disconnect'))
+
     await device.connect()
   })
 
@@ -57,7 +60,7 @@ describe('gatt e2e', () => {
     gattServer = await device.gatt()
     const services = await gattServer.services()
     console.log({services})
-  })
+  }, 20 * 1000) //increases test secs
 
   let service
   test("get service", async () => {
@@ -121,5 +124,6 @@ describe('gatt e2e', () => {
   test("disconnect", async () => {
     await adapter.stopDiscovery()
     await device.disconnect()
+    await new Promise(done => setTimeout(done, 100))
   })
 })
