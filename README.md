@@ -9,7 +9,7 @@ Bluetooth Low Energy (BLE) library written with only Javascript (no bindings) - 
 [![Downloads](https://img.shields.io/npm/dm/node-ble.svg)](https://www.npmjs.com/package/node-ble)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/chrvadala/15)
 
-#Setup
+# Setup
 ```sh
 yarn add node-ble
 ```
@@ -36,8 +36,8 @@ const gattServer = await device.gatt()
 
 ## STEP 3a: Read and write a characteristic
 ```javascript
-const service1 = await gattServer.getPrimaryService(TEST_SERVICE)
-const characteristic1 = await service1.getCharacteristic(TEST_CHARACTERISTIC)
+const service1 = await gattServer.getPrimaryService('uuid')
+const characteristic1 = await service1.getCharacteristic('uuid')
 await characteristic1.writeValue(Buffer.from("Hello world"))
 const buffer = await characteristic1.readValue()
 console.log(buffer)
@@ -45,8 +45,8 @@ console.log(buffer)
 
 ## STEP 3b: Subscribe to a characteristic
 ```javascript
-const service2 = await gattServer.getPrimaryService(TEST_NOTIFY_SERVICE)
-const characteristic2 = await service2.getCharacteristic(TEST_NOTIFY_CHARACTERISTIC)
+const service2 = await gattServer.getPrimaryService('uuid')
+const characteristic2 = await service2.getCharacteristic('uuid')
 await characteristic2.startNotifications()
 characteristic2.on('valuechanged', buffer => {
   console.log(buffer)
@@ -197,7 +197,7 @@ python example-gatt-server
 #### PC 2
 ```shell script
 # .env
-TEST_DEVICE=DC:A6:32:3F:7B:7A
+TEST_DEVICE=00:00:00:00:00:00
 TEST_SERVICE=12345678-1234-5678-1234-56789abcdef0
 TEST_CHARACTERISTIC=12345678-1234-5678-1234-56789abcdef1
 TEST_NOTIFY_SERVICE=0000180d-0000-1000-8000-00805f9b34fb
