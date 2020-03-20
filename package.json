@@ -17,7 +17,7 @@
     "bluetooth-low-energy",
     "ble",
     "bluetooth-peripherals",
-    "bluez,
+    "bluez",
     "bluez-dbus",
     "bluetooth",
     "bluetooth-le"
@@ -35,6 +35,13 @@
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@types/jest": "^25.1.3",
     "dotenv": "^8.2.0",
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "standard": "^14.3.3"
+  },
+  "standard": {
+    "ignore": [
+      "example.js",
+      "test/__interfaces/**.js"
+    ]
   }
 }

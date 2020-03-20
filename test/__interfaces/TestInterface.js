@@ -4,7 +4,6 @@ class TestInterface extends Interface {
   @property({signature: 's', access: ACCESS_READWRITE})
   SimpleProperty = 'bar';
 
-
   _VirtualProperty = 'foo'
 
   @property({signature: 's'})

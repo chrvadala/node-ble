@@ -6,60 +6,60 @@ const DEFAULT_TIMEOUT = 2 * 60 * 1000
 const DEFAULT_DISCOVERY_INTERVAL = 1000
 
 class Adapter {
-  constructor(dbus, adapter) {
+  constructor (dbus, adapter) {
     this.dbus = dbus
     this.adapter = adapter
     this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}`, 'org.bluez.Adapter1')
   }
 
-  async getAddress() {
-    return await this.helper.prop('Address')
+  async getAddress () {
+    return this.helper.prop('Address')
   }
 
-  async getAddressType() {
-    return await this.helper.prop('AddressType')
+  async getAddressType () {
+    return this.helper.prop('AddressType')
   }
 
-  async getName() {
-    return await this.helper.prop('Name')
+  async getName () {
+    return this.helper.prop('Name')
   }
 
-  async getAlias() {
-    return await this.helper.prop('Alias')
+  async getAlias () {
+    return this.helper.prop('Alias')
   }
 
-  async isPowered() {
-    return await this.helper.prop('Powered')
+  async isPowered () {
+    return this.helper.prop('Powered')
   }
 
-  async isDiscovering() {
-    return await this.helper.prop('Discovering')
+  async isDiscovering () {
+    return this.helper.prop('Discovering')
   }
 
-  async startDiscovery() {
+  async startDiscovery () {
     if (await this.isDiscovering()) {
       throw new Error('Discovery already in progress')
     }
 
-    await this.helper.callMethod("SetDiscoveryFilter", {
-      Transport: buildTypedValue('string', 'le'),
+    await this.helper.callMethod('SetDiscoveryFilter', {
+      Transport: buildTypedValue('string', 'le')
     })
     await this.helper.callMethod('StartDiscovery')
   }
 
-  async stopDiscovery() {
+  async stopDiscovery () {
     if (!await this.isDiscovering()) {
       throw new Error('No discovery started')
     }
     await this.helper.callMethod('StopDiscovery')
   }
 
-  async devices() {
+  async devices () {
     const devices = await this.helper.children()
     return devices.map(Adapter.deserializeUUID)
   }
 
-  async getDevice(uuid) {
+  async getDevice (uuid) {
     const serializedUUID = Adapter.serializeUUID(uuid)
 
     const devices = await this.helper.children()
@@ -70,12 +70,12 @@ class Adapter {
     return new Device(this.dbus, this.adapter, serializedUUID)
   }
 
-  async waitDevice(uuid, timeout = DEFAULT_TIMEOUT, discoveryInterval = DEFAULT_DISCOVERY_INTERVAL) {
-    //this should be optimized subscribing InterfacesAdded signal
+  async waitDevice (uuid, timeout = DEFAULT_TIMEOUT, discoveryInterval = DEFAULT_DISCOVERY_INTERVAL) {
+    // this should be optimized subscribing InterfacesAdded signal
 
     const cancellable = []
     const discoveryHandler = new Promise((resolve, reject) => {
-      let check = () => {
+      const check = () => {
         this.getDevice(uuid)
           .then(device => {
             resolve(device)
@@ -85,20 +85,19 @@ class Adapter {
               return e
             }
           })
-      };
+      }
 
       const handler = setInterval(check, discoveryInterval)
       cancellable.push(() => clearInterval(handler))
     })
 
-    const timeoutHandler = new Promise(((resolve, reject) => {
+    const timeoutHandler = new Promise((resolve, reject) => {
       const handler = setTimeout(() => {
         reject(new Error('operation timed out'))
       }, timeout)
 
       cancellable.push(() => clearTimeout(handler))
-    }))
-
+    })
 
     const device = await Promise.race([discoveryHandler, timeoutHandler])
 
@@ -108,18 +107,18 @@ class Adapter {
     return device
   }
 
-  async toString() {
+  async toString () {
     const name = await this.getName()
     const address = await this.getAddress()
 
     return `${name} [${address}]`
   }
 
-  static serializeUUID(uuid) {
+  static serializeUUID (uuid) {
     return `dev_${uuid.replace(/:/g, '_')}`
   }
 
-  static deserializeUUID(uuid) {
+  static deserializeUUID (uuid) {
     return uuid.substring(4).replace(/_/g, ':')
   }
 }

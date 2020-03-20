@@ -1,12 +1,12 @@
-const EventEmitter = require('events');
+const EventEmitter = require('events')
 
 const DEFAULT_OPTIONS = {
   useProps: true,
-  usePropsEvents: false,
+  usePropsEvents: false
 }
 
 class BusHelper extends EventEmitter {
-  constructor(dbus, service, object, iface, options = {}) {
+  constructor (dbus, service, object, iface, options = {}) {
     super()
 
     this.service = service
@@ -17,7 +17,7 @@ class BusHelper extends EventEmitter {
 
     this.options = {
       ...DEFAULT_OPTIONS,
-      ...options,
+      ...options
     }
 
     this._ready = false
@@ -26,9 +26,9 @@ class BusHelper extends EventEmitter {
     this._propsProxy = null
   }
 
-  async _prepare() {
+  async _prepare () {
     if (this._ready) return
-    const objectProxy = this._objectProxy = await this.dbus.getProxyObject(this.service, this.object);
+    const objectProxy = this._objectProxy = await this.dbus.getProxyObject(this.service, this.object)
     this._ifaceProxy = await objectProxy.getInterface(this.iface)
 
     if (this.options.useProps) {
@@ -46,7 +46,7 @@ class BusHelper extends EventEmitter {
     this._ready = true
   }
 
-  async props() {
+  async props () {
     if (!this.options.useProps) throw new Error('props not available')
     await this._prepare()
     const rawProps = await this._propsProxy.GetAll(this.iface)
@@ -57,22 +57,22 @@ class BusHelper extends EventEmitter {
     return props
   }
 
-  async prop(propName) {
+  async prop (propName) {
     if (!this.options.useProps) throw new Error('props not available')
     await this._prepare()
     const rawProp = await this._propsProxy.Get(this.iface, propName)
     return rawProp.value
   }
 
-  async set(propName, value) {
+  async set (propName, value) {
     if (!this.options.useProps) throw new Error('props not available')
     await this._prepare()
     await this._propsProxy.Set(this.iface, propName, value)
   }
 
-  async waitPropChange(propName) {
+  async waitPropChange (propName) {
     await this._prepare()
-    return await new Promise((resolve) => {
+    return new Promise((resolve) => {
       const cb = (iface, changedProps, invalidated) => {
         // console.log('changed props on %s -> %o', iface, changedProps)
 
@@ -86,19 +86,19 @@ class BusHelper extends EventEmitter {
     })
   }
 
-  async children() {
-    this._ready = false //WORKAROUND: it forces to construct a new ProxyObject
+  async children () {
+    this._ready = false // WORKAROUND: it forces to construct a new ProxyObject
     await this._prepare()
     return BusHelper.buildChildren(this.object, this._objectProxy.nodes)
   }
 
-  async callMethod(methodName, ...args) {
+  async callMethod (methodName, ...args) {
     await this._prepare()
-    return await this._ifaceProxy[methodName](...args)
+    return this._ifaceProxy[methodName](...args)
   }
 
-  static buildChildren(path, nodes) {
-    if (path === "/") path = ""
+  static buildChildren (path, nodes) {
+    if (path === '/') path = ''
     const children = new Set()
     for (const node of nodes) {
       if (!node.startsWith(path)) continue
@@ -114,5 +114,3 @@ class BusHelper extends EventEmitter {
 }
 
 module.exports = BusHelper
-
-

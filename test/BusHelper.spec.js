@@ -1,26 +1,28 @@
+/* global test, expect, beforeAll, afterAll */
+
 const TEST_NAME = 'org.test'
 const TEST_OBJECT = '/org/example'
 const TEST_IFACE = 'org.test.iface'
 
-const {systemBus: createSystemBus} = require('dbus-next');
+const { systemBus: createSystemBus } = require('dbus-next')
 const BusHelper = require('../src/BusHelper')
 const TestInterface = require('./__interfaces/TestInterface')
 const buildTypedValue = require('../src/buildTypedValue')
 
-let dbus, iface;
+let dbus, iface
 
 beforeAll(async () => {
-  dbus = createSystemBus();
-  await dbus.requestName(TEST_NAME);
+  dbus = createSystemBus()
+  await dbus.requestName(TEST_NAME)
 
-  iface = new TestInterface(TEST_IFACE);
-  dbus.export(TEST_OBJECT, iface);
+  iface = new TestInterface(TEST_IFACE)
+  dbus.export(TEST_OBJECT, iface)
 })
 
 afterAll(async () => {
-  dbus.unexport(TEST_OBJECT, iface);
-  await dbus.releaseName(TEST_NAME);
-  await dbus.disconnect();
+  dbus.unexport(TEST_OBJECT, iface)
+  await dbus.releaseName(TEST_NAME)
+  await dbus.disconnect()
 })
 
 test('props/prop', async () => {
@@ -32,7 +34,7 @@ test('props/prop', async () => {
   const props = await helper.props()
   expect(props).toEqual({
     SimpleProperty: 'bar',
-    VirtualProperty: "foo"
+    VirtualProperty: 'foo'
   })
 
   await helper.set('SimpleProperty', buildTypedValue('string', 'abc'))
@@ -52,7 +54,7 @@ test('buildChildren', () => {
     '/foo/a',
     '/foo/b/1',
     '/foo/c/1',
-    '/foo/c/2',
+    '/foo/c/2'
   ]
 
   expect(BusHelper.buildChildren('/bar', nodes)).toEqual([])
@@ -80,7 +82,7 @@ test('children', async () => {
 })
 
 test('disableProps', async () => {
-  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, {useProps: false})
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, { useProps: false })
 
   await expect(helper.callMethod('Echo', 'hello')).resolves.toEqual('>>hello')
 
@@ -88,7 +90,7 @@ test('disableProps', async () => {
   await expect(helper.prop('Test')).rejects.toThrow()
 })
 
-test("waitPropChange", async () => {
+test('waitPropChange', async () => {
   const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE)
 
   const res = helper.waitPropChange('VirtualProperty')
@@ -100,8 +102,8 @@ test("waitPropChange", async () => {
   await expect(res2).resolves.toEqual('byebye')
 })
 
-test("propsEvents", async () => {
-  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, {usePropsEvents: true})
+test('propsEvents', async () => {
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, { usePropsEvents: true })
 
   const res = new Promise((resolve) => {
     const cb = nextProps => {
@@ -113,5 +115,5 @@ test("propsEvents", async () => {
   })
 
   await helper.set('VirtualProperty', buildTypedValue('string', 'bar'))
-  await expect(res).resolves.toMatchObject({VirtualProperty: {signature: 's', value: 'bar'}})
+  await expect(res).resolves.toMatchObject({ VirtualProperty: { signature: 's', value: 'bar' } })
 })

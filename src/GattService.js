@@ -2,7 +2,7 @@ const BusHelper = require('./BusHelper')
 const GattCharacteristic = require('./GattCharacteristic')
 
 class GattService {
-  constructor(dbus, adapter, device, service) {
+  constructor (dbus, adapter, device, service) {
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
@@ -12,30 +12,30 @@ class GattService {
     this._characteristics = {}
   }
 
-  async init() {
+  async init () {
     this._characteristics = {}
 
-    let children = await this.helper.children()
+    const children = await this.helper.children()
     for (const c of children) {
-      let characteristic = new GattCharacteristic(this.dbus, this.adapter, this.device, this.service, c)
-      let uuid = await characteristic.getUUID()
+      const characteristic = new GattCharacteristic(this.dbus, this.adapter, this.device, this.service, c)
+      const uuid = await characteristic.getUUID()
       this._characteristics[uuid] = characteristic
     }
   }
 
-  async isPrimary() {
-    return await this.helper.prop('Primary')
+  async isPrimary () {
+    return this.helper.prop('Primary')
   }
 
-  async getUUID() {
-    return await this.helper.prop('UUID')
+  async getUUID () {
+    return this.helper.prop('UUID')
   }
 
-  async characteristics() {
+  async characteristics () {
     return Object.keys(this._characteristics)
   }
 
-  async getCharacteristic(uuid) {
+  async getCharacteristic (uuid) {
     if (uuid in this._characteristics) {
       return this._characteristics[uuid]
     }
@@ -43,8 +43,8 @@ class GattService {
     throw new Error('Characteristic not available')
   }
 
-  async toString() {
-    return await this.getUUID()
+  async toString () {
+    return this.getUUID()
   }
 }
 

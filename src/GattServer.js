@@ -2,7 +2,7 @@ const BusHelper = require('./BusHelper')
 const GattService = require('./GattService')
 
 class GattServer {
-  constructor(dbus, adapter, device) {
+  constructor (dbus, adapter, device) {
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
@@ -11,8 +11,8 @@ class GattServer {
     this._services = {}
   }
 
-  async init() {
-    //TODO add lock to avoid race conditions
+  async init () {
+    // TODO add lock to avoid race conditions
     this._services = {}
 
     const servicesResolved = await this.helper.prop('ServicesResolved')
@@ -20,20 +20,20 @@ class GattServer {
       await this.helper.waitPropChange('ServicesResolved')
     }
 
-    let children = await this.helper.children()
+    const children = await this.helper.children()
     for (const s of children) {
-      let service = new GattService(this.dbus, this.adapter, this.device, s)
-      let uuid = await service.getUUID()
+      const service = new GattService(this.dbus, this.adapter, this.device, s)
+      const uuid = await service.getUUID()
       await service.init()
       this._services[uuid] = service
     }
   }
 
-  async services() {
+  async services () {
     return Object.keys(this._services)
   }
 
-  async getPrimaryService(uuid) {
+  async getPrimaryService (uuid) {
     if (uuid in this._services) {
       return this._services[uuid]
     }

@@ -3,62 +3,62 @@ const BusHelper = require('./BusHelper')
 const GattServer = require('./GattServer')
 
 class Device extends EventEmitter {
-  constructor(dbus, adapter, device) {
+  constructor (dbus, adapter, device) {
     super()
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
-    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1', {usePropsEvents: true})
+    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1', { usePropsEvents: true })
   }
 
-  async getName() {
-    return await this.helper.prop('Name')
+  async getName () {
+    return this.helper.prop('Name')
   }
 
-  async getAddress() {
-    return await this.helper.prop('Address')
+  async getAddress () {
+    return this.helper.prop('Address')
   }
 
-  async getAddressType() {
-    return await this.helper.prop('AddressType')
+  async getAddressType () {
+    return this.helper.prop('AddressType')
   }
 
-  async getAlias() {
-    return await this.helper.prop('Alias')
+  async getAlias () {
+    return this.helper.prop('Alias')
   }
 
-  async getRSSI() {
-    return await this.helper.prop('RSSI')
+  async getRSSI () {
+    return this.helper.prop('RSSI')
   }
 
-  async getTXPower() {
-    return await this.helper.prop('TxPower')
+  async getTXPower () {
+    return this.helper.prop('TxPower')
   }
 
-  async isPaired() {
-    return await this.helper.prop('Paired')
+  async isPaired () {
+    return this.helper.prop('Paired')
   }
 
-  async isConnected() {
-    return await this.helper.prop('Connected')
+  async isConnected () {
+    return this.helper.prop('Connected')
   }
 
-  async pair() {
-    return await this.helper.callMethod('Pair')
+  async pair () {
+    return this.helper.callMethod('Pair')
   }
 
-  async cancelPair() {
-    return await this.helper.callMethod('CancelPair')
+  async cancelPair () {
+    return this.helper.callMethod('CancelPair')
   }
 
-  async connect() {
+  async connect () {
     const cb = (propertiesChanged) => {
       if ('Connected' in propertiesChanged) {
-        const {value} = propertiesChanged['Connected']
+        const { value } = propertiesChanged.Connected
         if (value) {
-          this.emit('connect', {connected: true})
+          this.emit('connect', { connected: true })
         } else {
-          this.emit('disconnect', {connected: false})
+          this.emit('disconnect', { connected: false })
         }
       }
     }
@@ -67,18 +67,18 @@ class Device extends EventEmitter {
     await this.helper.callMethod('Connect')
   }
 
-  async disconnect() {
+  async disconnect () {
     await this.helper.callMethod('Disconnect')
-    this.helper.removeAllListeners('PropertiesChanged') //might be improved
+    this.helper.removeAllListeners('PropertiesChanged') // might be improved
   }
 
-  async gatt() {
+  async gatt () {
     const gattServer = new GattServer(this.dbus, this.adapter, this.device)
     await gattServer.init()
     return gattServer
   }
 
-  async toString() {
+  async toString () {
     const name = await this.getName()
     const address = await this.getAddress()
 

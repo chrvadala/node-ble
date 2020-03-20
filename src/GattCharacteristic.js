@@ -3,29 +3,29 @@ const BusHelper = require('./BusHelper')
 const buildTypedValue = require('./buildTypedValue')
 
 class GattCharacteristic extends EventEmitter {
-  constructor(dbus, adapter, device, service, characteristic) {
+  constructor (dbus, adapter, device, service, characteristic) {
     super()
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
     this.service = service
     this.characteristic = characteristic
-    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}/${service}/${characteristic}`, 'org.bluez.GattCharacteristic1', {usePropsEvents: true})
+    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}/${service}/${characteristic}`, 'org.bluez.GattCharacteristic1', { usePropsEvents: true })
   }
 
-  async getUUID() {
-    return await this.helper.prop('UUID')
+  async getUUID () {
+    return this.helper.prop('UUID')
   }
 
-  async getFlags() {
-    return await this.helper.prop('Flags')
+  async getFlags () {
+    return this.helper.prop('Flags')
   }
 
-  async isNotifying() {
-    return await this.helper.prop('Notifying')
+  async isNotifying () {
+    return this.helper.prop('Notifying')
   }
 
-  async readValue(offset = 0) {
+  async readValue (offset = 0) {
     const options = {
       offset: buildTypedValue('uint16', offset)
     }
@@ -33,24 +33,24 @@ class GattCharacteristic extends EventEmitter {
     return Buffer.from(payload)
   }
 
-  async writeValue(value, offset = 0) {
+  async writeValue (value, offset = 0) {
     if (!Buffer.isBuffer(value)) {
       throw new Error('Only buffers can be wrote')
     }
     const options = {
       offset: buildTypedValue('uint16', offset),
-      type: buildTypedValue('string', 'reliable'),
+      type: buildTypedValue('string', 'reliable')
     }
-    const {data} = value.toJSON()
+    const { data } = value.toJSON()
     await this.helper.callMethod('WriteValue', data, options)
   }
 
-  async startNotifications() {
+  async startNotifications () {
     await this.helper.callMethod('StartNotify')
 
     const cb = (propertiesChanged) => {
       if ('Value' in propertiesChanged) {
-        const {value} = propertiesChanged['Value']
+        const { value } = propertiesChanged.Value
         this.emit('valuechanged', Buffer.from(value))
       }
     }
@@ -58,13 +58,13 @@ class GattCharacteristic extends EventEmitter {
     this.helper.on('PropertiesChanged', cb)
   }
 
-  async stopNotifications() {
+  async stopNotifications () {
     await this.helper.callMethod('StopNotify')
-    this.helper.removeAllListeners('PropertiesChanged') //might be improved
+    this.helper.removeAllListeners('PropertiesChanged') // might be improved
   }
 
-  async toString() {
-    return await this.getUUID()
+  async toString () {
+    return this.getUUID()
   }
 }
 

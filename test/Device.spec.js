@@ -1,9 +1,11 @@
+/* global test, expect, jest */
+
 jest.doMock('../src/BusHelper', () => {
   const EventEmitter = jest.requireActual('events')
 
   return class BusHelperMock extends EventEmitter {
-    constructor() {
-      super();
+    constructor () {
+      super()
       this._prepare = jest.fn()
       this.props = jest.fn()
       this.prop = jest.fn()
@@ -16,12 +18,12 @@ jest.doMock('../src/BusHelper', () => {
 })
 jest.mock('../src/GattServer')
 
-const dbus = Symbol()
+const dbus = Symbol('dbus')
 
 const Device = require('../src/Device')
 const GattServer = require('../src/GattServer')
 
-test("props", async () => {
+test('props', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
   device.helper.prop.mockImplementation((value) => Promise.resolve(({
     Name: '_name_',
@@ -32,7 +34,7 @@ test("props", async () => {
     TxPower: 50,
 
     Paired: true,
-    Connected: true,
+    Connected: true
   }[value])))
 
   await expect(device.getName()).resolves.toEqual('_name_')
@@ -48,7 +50,7 @@ test("props", async () => {
   await expect(device.toString()).resolves.toEqual('_name_ [00:00:00:00:00:00]')
 })
 
-test("pairing", async () => {
+test('pairing', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
   await expect(device.pair()).resolves.toBeUndefined()
@@ -60,7 +62,7 @@ test("pairing", async () => {
   expect(device.helper.callMethod).toHaveBeenCalledTimes(2)
 })
 
-test("connection", async () => {
+test('connection', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
   await expect(device.connect()).resolves.toBeUndefined()
@@ -72,7 +74,7 @@ test("connection", async () => {
   expect(device.helper.callMethod).toHaveBeenCalledTimes(2)
 })
 
-test("gatt server initialization", async () => {
+test('gatt server initialization', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
   const gattServer = await device.gatt()
@@ -81,7 +83,7 @@ test("gatt server initialization", async () => {
   expect(gattServer.init).toHaveBeenCalledTimes(1)
 })
 
-test("event:valuechanged", async () => {
+test('event:valuechanged', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
   const connectedFn = jest.fn()
@@ -93,16 +95,16 @@ test("event:valuechanged", async () => {
   device.on('disconnect', disconnectedFn)
 
   device.helper.emit('PropertiesChanged',
-    {Connected: {signature: 'b', value: true}}
+    { Connected: { signature: 'b', value: true } }
   )
 
-  expect(connectedFn).toHaveBeenCalledWith({connected: true})
+  expect(connectedFn).toHaveBeenCalledWith({ connected: true })
 
   device.helper.emit('PropertiesChanged',
-    {Connected: {signature: 'b', value: false}}
+    { Connected: { signature: 'b', value: false } }
   )
 
-  expect(disconnectedFn).toHaveBeenCalledWith({connected: false})
+  expect(disconnectedFn).toHaveBeenCalledWith({ connected: false })
 
   await device.disconnect()
 })
