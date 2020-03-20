@@ -175,6 +175,12 @@ Adds the following file into `/etc/dbus-1/system.d/bluetooth.conf`
 
 Then `sudo systemctl restart bluetooth`
 
+### Clean local cache
+```
+rm -r /var/lib/bluetooth/*
+```
+Then `sudo systemctl restart bluetooth`
+
 ## Run tests
 ### Unit tests
 ```
