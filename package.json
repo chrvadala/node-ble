@@ -26,7 +26,9 @@
   "scripts": {
     "test": "jest --testPathIgnorePatterns=e2e.spec.js",
     "test:e2e": "jest",
-    "test:ci": "standard && jest"
+    "test:ci": "standard && jest && yarn codecov",
+    "version": "yarn test && yarn standard",
+    "codecov": "jest --coverage && codecov"
   },
   "dependencies": {
     "dbus-next": "^0.8.2"
@@ -35,6 +37,7 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@types/jest": "^25.1.3",
+    "codecov": "^3.6.5",
     "dotenv": "^8.2.0",
     "jest": "^25.1.0",
     "standard": "^14.3.3"
