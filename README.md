@@ -48,7 +48,8 @@ const adapter = await bluetooth.defaultAdapter()
 ## STEP 2: Start discovering
 In order to find a Bluetooth Low Energy device out, you have to start a discovery operation.
 ```javascript
-await adapter.startDiscovery()
+if (! await adapter.isDiscovering())
+  await adapter.startDiscovery()
 ```
 
 ## STEP 3: Get a device, Connect and Get GATT Server
