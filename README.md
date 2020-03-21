@@ -218,7 +218,8 @@ yarn test:e2e
 ```
 
 ## Changelog
-- **0.x** - WIP - Work In Progress
+- **0.x** - Beta version
+- **1.0** - First official version
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
