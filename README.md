@@ -16,6 +16,26 @@ yarn add node-ble
 
 # Example
 
+## Provide permissions
+In order to allow a connection with the DBus daemon, you have to set up right permissions.
+
+Create the file `/etc/dbus-1/system.d/node-ble.conf` with the following content (customize with your userid)
+
+```xml
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <policy user="yourusername">
+   <allow own="org.bluez"/>
+    <allow send_destination="org.bluez"/>
+    <allow send_interface="org.bluez.GattCharacteristic1"/>
+    <allow send_interface="org.bluez.GattDescriptor1"/>
+    <allow send_interface="org.freedesktop.DBus.ObjectManager"/>
+    <allow send_interface="org.freedesktop.DBus.Properties"/>
+  </policy>
+</busconfig>
+```
+
 ## STEP 1: Get Adapter
 To start a Bluetooth Low Energy (BLE) connection you need a Bluetooth adapter.
 
@@ -155,36 +175,22 @@ const {bluetooth, destroy} = createBluetooth()
 | valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
 
 ## Troubleshooting
-### Permission Denied
-Adds the following file into `/etc/dbus-1/system.d/bluetooth.conf`
-
-```
-<policy user="<insert-user-here>">
-  <allow own="org.bluez"/>
-  <allow send_destination="org.bluez"/>
-  <allow send_interface="org.bluez.GattCharacteristic1"/>
-  <allow send_interface="org.bluez.GattDescriptor1"/>
-  <allow send_interface="org.freedesktop.DBus.ObjectManager"/>
-  <allow send_interface="org.freedesktop.DBus.Properties"/>
-
-  <allow own="org.test"/>
-  <allow send_destination="org.test"/>
-  <allow send_interface="org.test.iface"/>
-</policy>
-```
-
-Then `sudo systemctl restart bluetooth`
-
 ### Clean local cache
 ```
 rm -r /var/lib/bluetooth/*
 ```
 Then `sudo systemctl restart bluetooth`
 
+### Check available Bluetooth adapters
+```
+hciconfig -a
+hcitool dev
+```
+
 ## Run tests
 ### Unit tests
 ```
-FORCE_SESSION_DBUS=1 yarn test
+yarn test
 ```
 
 ### End to end (e2e) tests
@@ -205,6 +211,20 @@ TEST_CHARACTERISTIC=12345678-1234-5678-1234-56789abcdef1
 TEST_NOTIFY_SERVICE=0000180d-0000-1000-8000-00805f9b34fb
 TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
 ```
+
+```xml
+<!-- /etc/dbus-1/system.d/node-ble-test.conf -->
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <policy user="my_username">
+    <allow own="org.test"/>
+    <allow send_destination="org.test"/>
+    <allow send_interface="org.test.iface"/>
+  </policy>
+</busconfig>
+```
+
 ```shell script
 yarn test:e2e
 ```

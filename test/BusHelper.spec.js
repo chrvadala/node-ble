@@ -4,7 +4,7 @@ const TEST_NAME = 'org.test'
 const TEST_OBJECT = '/org/example'
 const TEST_IFACE = 'org.test.iface'
 
-const { systemBus: createSystemBus, sessionBus: createSessionBus } = require('dbus-next')
+const { systemBus: createSystemBus } = require('dbus-next')
 const BusHelper = require('../src/BusHelper')
 const TestInterface = require('./__interfaces/TestInterface')
 const buildTypedValue = require('../src/buildTypedValue')
@@ -12,8 +12,7 @@ const buildTypedValue = require('../src/buildTypedValue')
 let dbus, iface
 
 beforeAll(async () => {
-  dbus = process.env.FORCE_SESSION_DBUS // forces session bus due to CI limitations
-    ? createSessionBus() : createSystemBus()
+  dbus = createSystemBus()
 
   await dbus.requestName(TEST_NAME)
 
