@@ -159,7 +159,7 @@ const {bluetooth, destroy} = createBluetooth()
 | `Promise<GattCharacteristic> getCharacteristic(String uuid)` | Returns a specific characteristic. |
 | `Promise<String> toString()` | User friendly service name. |
 
-## `GattCharacteristic` extend `EventEmitter`
+## `GattCharacteristic` extends `EventEmitter`
 | Method | Description |
 | --- | --- |
 | `Promise<String> getUUID()` | 128-bit characteristic UUID. |
@@ -174,19 +174,6 @@ const {bluetooth, destroy} = createBluetooth()
 | Event | Description |
 | --- | --- |
 | valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
-
-## Troubleshooting
-### Clean local cache
-```
-rm -r /var/lib/bluetooth/*
-```
-Then `sudo systemctl restart bluetooth`
-
-### Check available Bluetooth adapters
-```
-hciconfig -a
-hcitool dev
-```
 
 ## Run tests
 ### Unit tests
@@ -242,3 +229,15 @@ yarn test:e2e
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt
 - https://webbluetoothcg.github.io/web-bluetooth - method signatures follow, when possible, WebBluetooth standards
 - https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web - method signatures follow, when possible, WebBluetooth standards
+
+## Similar libraries
+- https://github.com/noble/noble
+- https://github.com/abandonware/noble (noble fork)
+- https://www.npmjs.com/package/node-web-bluetooth
+
+## Useful commands
+| Command | Description |
+| --- | --- |
+| rm -r /var/lib/bluetooth/* | Clean Bluetooth cache |
+| hciconfig -a | Adapter info |
+| hcitool dev | Adapter info (through Bluez) |
