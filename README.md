@@ -241,3 +241,4 @@ yarn test:e2e
 | rm -r /var/lib/bluetooth/* | Clean Bluetooth cache |
 | hciconfig -a | Adapter info |
 | hcitool dev | Adapter info (through Bluez) |
+| nvram bluetoothHostControllerSwitchBehavior=never | Only on Parallels |
