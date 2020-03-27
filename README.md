@@ -1,6 +1,6 @@
 # node-ble
 
-Bluetooth Low Energy (BLE) library written with only Javascript (no bindings) - baked by Bluez via DBus
+Bluetooth Low Energy (BLE) library written with with pure Node.js (no bindings) - baked by Bluez via DBus
 
 [![chrvadala](https://img.shields.io/badge/website-chrvadala-orange.svg)](https://chrvadala.github.io)
 [![Build Status](https://travis-ci.org/chrvadala/node-ble.svg?branch=master)](https://travis-ci.org/chrvadala/node-ble)
