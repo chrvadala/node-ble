@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+env:
+  RUNNER_TEMP: /tmp
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: 'https://registry.npmjs.org'
+      - name: Setup dbus permissions
+        run: sudo sh -c 'sed "s/my_username/runner/g" node-ble.conf > /etc/dbus-1/system.d/dbus.conf'
+      - run: yarn
+      - run: yarn ci
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+  gh-release:
+    runs-on: ubuntu-18.04
+    needs: [publish-npm]
+    steps:
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: Release ${{ github.ref }}
