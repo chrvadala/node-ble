@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  - push
+  - pull_request
+
+env:
+  RUNNER_TEMP: /tmp
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-18.04 ]
+        node: [ 10, 12 ]
+    name: Test Nodejs v${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup dbus permissions
+        run: sudo sh -c 'sed "s/my_username/runner/g" node-ble.conf > /etc/dbus-1/system.d/dbus.conf'
+      - run: yarn
+      - run: yarn ci
+      - name: Publish Coveralls
+        uses: coverallsapp/github-action@v1.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: run-nodejs-v${{ matrix.node }}-${{ matrix.os }}
+          parallel: true
+
+  finish:
+    name: Finish
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true

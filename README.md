@@ -3,11 +3,11 @@
 Bluetooth Low Energy (BLE) library written with pure Node.js (no bindings) - baked by Bluez via DBus
 
 [![chrvadala](https://img.shields.io/badge/website-chrvadala-orange.svg)](https://chrvadala.github.io)
-[![Build Status](https://travis-ci.org/chrvadala/node-ble.svg?branch=master)](https://travis-ci.org/chrvadala/node-ble)
+[![Test](https://github.com/chrvadala/node-ble/workflows/Test/badge.svg)](https://github.com/chrvadala/node-ble/actions)
 [![Coverage Status](https://coveralls.io/repos/github/chrvadala/node-ble/badge.svg?branch=master)](https://coveralls.io/github/chrvadala/node-ble?branch=master)
 [![npm](https://img.shields.io/npm/v/node-ble.svg?maxAge=2592000?style=plastic)](https://www.npmjs.com/package/node-ble)
 [![Downloads](https://img.shields.io/npm/dm/node-ble.svg)](https://www.npmjs.com/package/node-ble)
-[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/chrvadala/15)
+[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/chrvadala/25)
 
 # Setup
 ```sh
@@ -220,6 +220,7 @@ yarn test:e2e
 ## Changelog
 - **0.x** - Beta version
 - **1.0** - First official version
+- **1.1** - Migrates to gh-workflows
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
