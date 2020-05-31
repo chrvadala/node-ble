@@ -221,6 +221,7 @@ yarn test:e2e
 - **0.x** - Beta version
 - **1.0** - First official version
 - **1.1** - Migrates to gh-workflows
+- **1.2** - Upgrades deps
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
