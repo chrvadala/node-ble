@@ -4,9 +4,6 @@ on:
   - push
   - pull_request
 
-env:
-  RUNNER_TEMP: /tmp
-
 jobs:
   build:
     strategy:
@@ -17,12 +14,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+      - name: Setup dbus permissions
+        run: sudo sh -c 'sed "s/my_username/runner/g" node-ble.conf > /etc/dbus-1/system.d/dbus.conf'
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: Setup dbus permissions
-        run: sudo sh -c 'sed "s/my_username/runner/g" node-ble.conf > /etc/dbus-1/system.d/dbus.conf'
-      - run: yarn
+      - run: yarn install
+      - run: yarn build
       - run: yarn ci
       - name: Publish Coveralls
         uses: coverallsapp/github-action@v1.1.1
@@ -36,8 +34,8 @@ jobs:
     needs: build
     runs-on: ubuntu-18.04
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v1.1.1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v1.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

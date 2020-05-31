@@ -29,7 +29,7 @@
     "test:e2e": "jest",
     "standard": "standard",
     "ci": "npm-run-all standard coverage",
-    "preversion": "npm-run-all standard test"
+    "build": "exit 0"
   },
   "dependencies": {
     "dbus-next": "^0.8.2"
