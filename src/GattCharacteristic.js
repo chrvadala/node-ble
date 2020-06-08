@@ -33,13 +33,13 @@ class GattCharacteristic extends EventEmitter {
     return Buffer.from(payload)
   }
 
-  async writeValue (value, offset = 0) {
+  async writeValue (value, offset = 0, type = 'reliable') {
     if (!Buffer.isBuffer(value)) {
       throw new Error('Only buffers can be wrote')
     }
     const options = {
       offset: buildTypedValue('uint16', offset),
-      type: buildTypedValue('string', 'reliable')
+      type: buildTypedValue('string', type)
     }
     const { data } = value.toJSON()
     await this.helper.callMethod('WriteValue', data, options)
