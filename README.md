@@ -19,13 +19,13 @@ yarn add node-ble
 ## Provide permissions
 In order to allow a connection with the DBus daemon, you have to set up right permissions.
 
-Create the file `/etc/dbus-1/system.d/node-ble.conf` with the following content (customize with your userid)
+Create the file `/etc/dbus-1/system.d/node-ble.conf` with the following content (customize with userid)
 
 ```xml
 <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
   "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
 <busconfig>
-  <policy user="yourusername">
+  <policy user="%userid%">
    <allow own="org.bluez"/>
     <allow send_destination="org.bluez"/>
     <allow send_interface="org.bluez.GattCharacteristic1"/>
@@ -176,41 +176,48 @@ const {bluetooth, destroy} = createBluetooth()
 | valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
 
 ## Run tests
+In order to run test suite you have to set up right DBus permissions.
+
+Create the file `/etc/dbus-1/system.d/node-ble-test.conf` with the following content (customize with userid)
+
+```xml
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <policy user="%userid%">
+    <allow own="org.test"/>
+    <allow send_destination="org.test"/>
+    <allow send_interface="org.test.iface"/>
+  </policy>
+</busconfig>
+```
+
 ### Unit tests
 ```
 yarn test
 ```
 
 ### End to end (e2e) tests
-#### PC 1
+
+The end to end test will try to connect to a real bluetooth device and read some characteristics. To do that, you need two different devices.
+
+#### Device 1
 ```shell script
 wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-advertisement
 wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-gatt-server
 python example-advertisement
 python example-gatt-server
+hcitool dev #this command shows bluetooth mac address
 ```
 
-#### PC 2
+#### Device 2
 ```shell script
 # .env
-TEST_DEVICE=00:00:00:00:00:00
+TEST_DEVICE=00:00:00:00:00:00    #set up with device 1 bluetooth address
 TEST_SERVICE=12345678-1234-5678-1234-56789abcdef0
 TEST_CHARACTERISTIC=12345678-1234-5678-1234-56789abcdef1
 TEST_NOTIFY_SERVICE=0000180d-0000-1000-8000-00805f9b34fb
 TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
-```
-
-```xml
-<!-- /etc/dbus-1/system.d/node-ble-test.conf -->
-<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-<busconfig>
-  <policy user="my_username">
-    <allow own="org.test"/>
-    <allow send_destination="org.test"/>
-    <allow send_interface="org.test.iface"/>
-  </policy>
-</busconfig>
 ```
 
 ```shell script
@@ -244,4 +251,5 @@ yarn test:e2e
 | rm -r /var/lib/bluetooth/* | Clean Bluetooth cache |
 | hciconfig -a | Adapter info |
 | hcitool dev | Adapter info (through Bluez) |
+| d-feet | DBus debugging tool |
 | nvram bluetoothHostControllerSwitchBehavior=never | Only on Parallels |
