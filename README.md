@@ -175,6 +175,23 @@ const {bluetooth, destroy} = createBluetooth()
 | --- | --- |
 | valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
 
+## Compatibility
+This library works on many architectures supported by Linux.
+It leverages on Bluez driver, a component supported by the following platforms and distributions https://www.bluez.org/about
+
+*Node-ble* has been tested on the following environment:
+- Raspbian GNU/Linux 10 (buster)
+- Ubuntu 18.04.4 LTS
+
+## Changelog
+- **0.x** - Beta version
+- **1.0** - First official version
+- **1.1** - Migrates to gh-workflows
+- **1.2** - Upgrades deps
+
+## Contributors
+- [chrvadala](https://github.com/chrvadala) (author)
+
 ## Run tests
 In order to run test suite you have to set up right DBus permissions.
 
@@ -223,15 +240,6 @@ TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
 ```shell script
 yarn test:e2e
 ```
-
-## Changelog
-- **0.x** - Beta version
-- **1.0** - First official version
-- **1.1** - Migrates to gh-workflows
-- **1.2** - Upgrades deps
-
-## Contributors
-- [chrvadala](https://github.com/chrvadala) (author)
 
 ## References
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
