@@ -102,7 +102,7 @@ const {bluetooth, destroy} = createBluetooth()
 ## `Bluetooth`
 | Method | Description |
 | --- | --- |
-| `String[] adapters()` | List of available adapters |
+| `Promise<String[]> adapters()` | List of available adapters |
 | `Promise<Adapter> defaultAdapter()` | Get an available adapter |
 | `Promise<Adapter> getAdapter(String adapter)` | Get a specific adapter (one of available in `adapters()`)|
 
@@ -148,7 +148,7 @@ const {bluetooth, destroy} = createBluetooth()
 | Method | Description |
 | --- | --- |
 | `Promise<String[]> services()` | List of available services |
-| `Promise<GattService[]> getPrimaryService(String uuid)` | Returns a specific Primary Service |
+| `Promise<GattService> getPrimaryService(String uuid)` | Returns a specific Primary Service |
 
 ## `GattService`
 | Method | Description |

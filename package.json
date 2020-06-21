@@ -6,6 +6,7 @@
   "author": "chrvadala",
   "license": "MIT",
   "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
   "files": [
     "*.md",
     "src",
@@ -35,6 +36,7 @@
     "dbus-next": "^0.8.2"
   },
   "devDependencies": {
+    "@types/node": "^14.0.13",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-proposal-decorators": "^7.10.1",
     "@types/jest": "^25.2.3",
