@@ -102,7 +102,7 @@ const {bluetooth, destroy} = createBluetooth()
 ## `Bluetooth`
 | Method | Description |
 | --- | --- |
-| `String[] adapters()` | List of available adapters |
+| `Promise<String[]> adapters()` | List of available adapters |
 | `Promise<Adapter> defaultAdapter()` | Get an available adapter |
 | `Promise<Adapter> getAdapter(String adapter)` | Get a specific adapter (one of available in `adapters()`)|
 
@@ -148,7 +148,7 @@ const {bluetooth, destroy} = createBluetooth()
 | Method | Description |
 | --- | --- |
 | `Promise<String[]> services()` | List of available services |
-| `Promise<GattService[]> getPrimaryService(String uuid)` | Returns a specific Primary Service |
+| `Promise<GattService> getPrimaryService(String uuid)` | Returns a specific Primary Service |
 
 ## `GattService`
 | Method | Description |
@@ -166,7 +166,7 @@ const {bluetooth, destroy} = createBluetooth()
 | `Promise<String[]> getFlags()` | Defines how the characteristic value can be used. |
 | `Promise<bool> isNotifying()` | True, if notifications or indications on this characteristic are currently enabled. |
 | `Promise<Buffer> readValue(Number offset = 0)` | Issues a request to read the value of the characteristic and returns the value if the operation was successful. |
-| `Promise<Buffer> writeValue(Buffer buffer, Number offset = 0)` | Issues a request to write the value of the characteristic. |
+| `Promise<void> writeValue(Buffer buffer, Number offset = 0)` | Issues a request to write the value of the characteristic. |
 | `Promise<void> startNotifications()` | Starts a notification session from this characteristic if it supports value notifications or indications. |
 | `Promise<void> stopNotifications()` | This method will cancel any previous StartNotify transaction. |
 | `Promise<String> toString()` | User friendly characteristic name. |
