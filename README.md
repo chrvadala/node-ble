@@ -188,9 +188,11 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.0** - First official version
 - **1.1** - Migrates to gh-workflows
 - **1.2** - Upgrades deps
+- **1.3** - Adds typescript definitions [#10](https://github.com/chrvadala/node-ble/pull/10)
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
+- [pascalopitz](https://github.com/pascalopitz)
 
 ## Run tests
 In order to run test suite you have to set up right DBus permissions.
