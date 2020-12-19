@@ -182,6 +182,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 *Node-ble* has been tested on the following environment:
 - Raspbian GNU/Linux 10 (buster)
 - Ubuntu 18.04.4 LTS
+- Ubuntu 20.04 LTS
 
 ## Changelog
 - **0.x** - Beta version
@@ -189,6 +190,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.1** - Migrates to gh-workflows
 - **1.2** - Upgrades deps
 - **1.3** - Adds typescript definitions [#10](https://github.com/chrvadala/node-ble/pull/10)
+- **1.4** - Upgrades deps
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
