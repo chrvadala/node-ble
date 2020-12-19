@@ -50,7 +50,7 @@
   "standard": {
     "ignore": [
       "example.js",
-      "test/__interfaces/**.js"
+      "test/__interfaces/*.js"
     ]
   }
 }
