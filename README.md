@@ -166,7 +166,7 @@ const {bluetooth, destroy} = createBluetooth()
 | `Promise<String[]> getFlags()` | Defines how the characteristic value can be used. |
 | `Promise<bool> isNotifying()` | True, if notifications or indications on this characteristic are currently enabled. |
 | `Promise<Buffer> readValue(Number offset = 0)` | Issues a request to read the value of the characteristic and returns the value if the operation was successful. |
-| `Promise<void> writeValue(Buffer buffer, Number offset = 0)` | Issues a request to write the value of the characteristic. |
+| `Promise<void> writeValue(Buffer buffer, WriteValueOptions options = {})` | Issues a request to write the value of the characteristic. Default options `{ offset: 0, type: 'reliable' }`. |
 | `Promise<void> startNotifications()` | Starts a notification session from this characteristic if it supports value notifications or indications. |
 | `Promise<void> stopNotifications()` | This method will cancel any previous StartNotify transaction. |
 | `Promise<String> toString()` | User friendly characteristic name. |
