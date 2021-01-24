@@ -191,10 +191,12 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.2** - Upgrades deps
 - **1.3** - Adds typescript definitions [#10](https://github.com/chrvadala/node-ble/pull/10)
 - **1.4** - Upgrades deps
+- **1.5** - Adds write options configuration  `async writeValue (value, optionsOrOffset = {})` [#20](https://github.com/chrvadala/node-ble/pull/20); Upgrades deps
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
 - [pascalopitz](https://github.com/pascalopitz)
+- [lupol](https://github.com/lupol)
 
 ## Run tests
 In order to run test suite you have to set up right DBus permissions.
