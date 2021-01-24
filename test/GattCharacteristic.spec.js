@@ -16,6 +16,7 @@ jest.doMock('../src/BusHelper', () => {
     }
   }
 })
+const buildTypedValue = require('../src/buildTypedValue')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol('dbus')
 
@@ -35,10 +36,26 @@ test('props', async () => {
 
 test('read/write', async () => {
   const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
+  const writeValueOptions = (offset = 0, type = 'reliable') => {
+    return { offset: buildTypedValue('uint16', offset), type: buildTypedValue('string', type) }
+  }
 
   await expect(characteristic.writeValue('not_a_buffer')).rejects.toThrow('Only buffers can be wrote')
+
+  await expect(characteristic.writeValue(Buffer.from('hello'), 5)).resolves.toBeUndefined()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), writeValueOptions(5))
+
   await expect(characteristic.writeValue(Buffer.from('hello'))).resolves.toBeUndefined()
-  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), expect.anything())
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), writeValueOptions())
+
+  await expect(characteristic.writeValue(Buffer.from('hello'), { type: 'command' })).resolves.toBeUndefined()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), writeValueOptions(0, 'command'))
+
+  await expect(characteristic.writeValue(Buffer.from('hello'), { offset: 9, type: 'request' })).resolves.toBeUndefined()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), writeValueOptions(9, 'request'))
+
+  await expect(characteristic.writeValue(Buffer.from('hello'), 'incorrect argument')).resolves.toBeUndefined()
+  expect(characteristic.helper.callMethod).toHaveBeenCalledWith('WriteValue', expect.anything(), writeValueOptions())
 
   characteristic.helper.callMethod.mockResolvedValueOnce([255, 100, 0])
   await expect(characteristic.readValue()).resolves.toEqual(Buffer.from([255, 100, 0]))

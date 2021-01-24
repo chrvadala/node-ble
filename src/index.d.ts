@@ -6,7 +6,7 @@ declare namespace NodeBle {
         getFlags(): Promise<string[]>;
         isNotifying(): Promise<boolean>;
         readValue(offset?: number): Promise<Buffer>;
-        writeValue(buffer: Buffer, offset?: number): Promise<void>;
+        writeValue(buffer: Buffer, optionsOrOffset?: number | WriteValueOptions): Promise<void>;
         startNotifications(): Promise<void>;
         stopNotifications(): Promise<void>;
         toString(): Promise<string>;
@@ -75,6 +75,11 @@ declare namespace NodeBle {
         destroy(): void;
         bluetooth: Bluetooth;
     };
+
+    interface WriteValueOptions {
+        offset?: number;
+        type?: 'reliable' | 'request' | 'command';
+    }
 }
 
 export = NodeBle;
