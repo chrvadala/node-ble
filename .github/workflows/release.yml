@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: Setup dbus permissions
@@ -28,7 +28,7 @@ jobs:
       version: ${{ env.VERSION }}
 
   npm-publish:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: build
     steps:
       - uses: actions/setup-node@v1
@@ -46,7 +46,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
   tag-release:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [build, npm-publish]
     steps:
       - uses: actions/checkout@v2
@@ -58,7 +58,7 @@ jobs:
           release: v${{ needs.build.outputs.version }}
 
   gh-release:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [build, npm-publish]
     steps:
       - name: Create GitHub Release
