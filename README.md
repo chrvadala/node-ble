@@ -235,16 +235,7 @@ hcitool dev #this command shows bluetooth mac address
 
 #### Device 2
 ```shell script
-# .env
-TEST_DEVICE=00:00:00:00:00:00
-TEST_SERVICE=12345678-1234-5678-1234-56789abcdef0
-TEST_CHARACTERISTIC=12345678-1234-5678-1234-56789abcdef1
-TEST_NOTIFY_SERVICE=0000180d-0000-1000-8000-00805f9b34fb
-TEST_NOTIFY_CHARACTERISTIC=00002a37-0000-1000-8000-00805f9b34fb
-```
-
-```shell script
-yarn test:e2e
+TEST_DEVICE=00:00:00:00:00:00 yarn test:e2e
 ```
 
 ## References

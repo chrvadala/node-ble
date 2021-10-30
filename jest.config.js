@@ -1,3 +1,3 @@
 module.exports = {
-  setupFiles: ['./jest.init.js']
+  coveragePathIgnorePatterns: ['test-e2e/e2e-test-utils.js']
 }

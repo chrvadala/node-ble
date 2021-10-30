@@ -1,16 +1,14 @@
 /* global test, describe, expect, beforeAll, afterAll */
-
+const { getTestDevice } = require('./e2e-test-utils.js')
 const { createBluetooth } = require('..')
 
-const {
-  TEST_DEVICE, // ADDRESS OF A BLE TEST DEVICE
+const TEST_SERVICE = '12345678-1234-5678-1234-56789abcdef0' // FOR READ/WRITE TESTING
+const TEST_CHARACTERISTIC = '12345678-1234-5678-1234-56789abcdef1' // FOR READ/WRITE TESTING
 
-  TEST_SERVICE, // FOR READ/WRITE TESTING
-  TEST_CHARACTERISTIC, // FOR READ/WRITE TESTING
+const TEST_NOTIFY_SERVICE = '0000180d-0000-1000-8000-00805f9b34fb' // FOR NOTIFY TESTING
+const TEST_NOTIFY_CHARACTERISTIC = '00002a37-0000-1000-8000-00805f9b34fb' // FOR NOTIFY TESTING
 
-  TEST_NOTIFY_SERVICE, // FOR NOTIFY TESTING
-  TEST_NOTIFY_CHARACTERISTIC // FOR NOTIFY TESTING
-} = process.env
+const TEST_DEVICE = getTestDevice()
 
 let bluetooth, destroy
 
@@ -19,10 +17,6 @@ afterAll(() => destroy())
 
 test('check properly configured', () => {
   expect(TEST_DEVICE).not.toBeUndefined()
-  expect(TEST_SERVICE).not.toBeUndefined()
-  expect(TEST_CHARACTERISTIC).not.toBeUndefined()
-  expect(TEST_NOTIFY_SERVICE).not.toBeUndefined()
-  expect(TEST_NOTIFY_CHARACTERISTIC).not.toBeUndefined()
 })
 
 describe('gatt e2e', () => {
