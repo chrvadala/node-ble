@@ -19,9 +19,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install
-      - run: yarn build
-      - run: yarn ci
+      - run: npm install-ci-test
       - name: Publish Coveralls
         uses: coverallsapp/github-action@v1.1.1
         with:
