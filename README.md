@@ -11,7 +11,7 @@ Bluetooth Low Energy (BLE) library written with pure Node.js (no bindings) - bak
 
 # Setup
 ```sh
-yarn add node-ble
+npm install node-ble
 ```
 
 # Example
@@ -217,7 +217,7 @@ Create the file `/etc/dbus-1/system.d/node-ble-test.conf` with the following con
 
 ### Unit tests
 ```
-yarn test
+npm test
 ```
 
 ### End to end (e2e) tests
@@ -230,12 +230,12 @@ wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-adver
 wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-gatt-server
 python example-advertisement
 python example-gatt-server
-hcitool dev #this command shows bluetooth mac address
+hcitool dev #this command shows bluetooth address
 ```
 
 #### Device 2
 ```shell script
-TEST_DEVICE=00:00:00:00:00:00 yarn test:e2e
+TEST_DEVICE=00:00:00:00:00:00 npm run test:e2e
 ```
 
 ## References
