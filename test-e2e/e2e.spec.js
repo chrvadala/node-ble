@@ -47,7 +47,8 @@ describe('gatt e2e', () => {
   test('connect', async () => {
     device.on('connect', () => console.log('connect'))
     device.on('disconnect', () => console.log('disconnect'))
-
+    const isConnected = await device.isConnected()
+    console.log({ isConnected })
     await device.connect()
   }, 20 * 1000)
 
