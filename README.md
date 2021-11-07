@@ -166,14 +166,14 @@ const {bluetooth, destroy} = createBluetooth()
 | `Promise<String[]> getFlags()` | Defines how the characteristic value can be used. |
 | `Promise<bool> isNotifying()` | True, if notifications or indications on this characteristic are currently enabled. |
 | `Promise<Buffer> readValue(Number offset = 0)` | Issues a request to read the value of the characteristic and returns the value if the operation was successful. |
-| `Promise<void> writeValue(Buffer buffer, Number | WriteValueOptions options = {})` | Issues a request to write the value of the characteristic. Default options `{ offset: 0, type: 'reliable' }`. |
+| `Promise<void> writeValue(Buffer buffer, WriteValueOptions options = {})` | Issues a request to write the value of the characteristic. Default options `{ offset: 0, type: 'reliable' }`. |
 | `Promise<void> startNotifications()` | Starts a notification session from this characteristic if it supports value notifications or indications. |
 | `Promise<void> stopNotifications()` | This method will cancel any previous StartNotify transaction. |
 | `Promise<String> toString()` | User friendly characteristic name. |
 
 | Event | Description |
 | --- | --- |
-| valuechanged | New value is notified. (invoke `startNotifications()` to enable notifications)
+| `valuechanged` | New value is notified. (invoke `startNotifications()` to enable notifications)
 
 ## Compatibility
 This library works on many architectures supported by Linux.
@@ -192,7 +192,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.3** - Adds typescript definitions [#10](https://github.com/chrvadala/node-ble/pull/10)
 - **1.4** - Upgrades deps
 - **1.5** - Adds write options configuration  `async writeValue (value, optionsOrOffset = {})` [#20](https://github.com/chrvadala/node-ble/pull/20); Upgrades deps
-- **1.6** - Upgrades deps and remove some dependencies; migrates to npm; improves gh-actions
+- **1.6** - Upgrades deps and removes some dependencies; migrates to npm; improves gh-actions
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
