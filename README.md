@@ -192,6 +192,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.3** - Adds typescript definitions [#10](https://github.com/chrvadala/node-ble/pull/10)
 - **1.4** - Upgrades deps
 - **1.5** - Adds write options configuration  `async writeValue (value, optionsOrOffset = {})` [#20](https://github.com/chrvadala/node-ble/pull/20); Upgrades deps
+- **1.6** - Upgrades deps and remove some dependencies; migrates to npm; improves gh-actions
 
 ## Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
