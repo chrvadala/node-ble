@@ -35,6 +35,10 @@ class Device extends EventEmitter {
     return this.helper.prop('TxPower')
   }
 
+  async manufacturerData () {
+    return this.helper.prop('ManufacturerData')
+  }
+
   async isPaired () {
     return this.helper.prop('Paired')
   }

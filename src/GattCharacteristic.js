@@ -51,8 +51,6 @@ class GattCharacteristic extends EventEmitter {
   }
 
   async startNotifications () {
-    await this.helper.callMethod('StartNotify')
-
     const cb = (propertiesChanged) => {
       if ('Value' in propertiesChanged) {
         const { value } = propertiesChanged.Value
@@ -61,6 +59,8 @@ class GattCharacteristic extends EventEmitter {
     }
 
     this.helper.on('PropertiesChanged', cb)
+
+    await this.helper.callMethod('StartNotify')
   }
 
   async stopNotifications () {
