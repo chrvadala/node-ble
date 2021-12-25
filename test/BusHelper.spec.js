@@ -24,6 +24,13 @@ afterAll(async () => {
   dbus.unexport(TEST_OBJECT, iface)
   await dbus.releaseName(TEST_NAME)
   await dbus.disconnect()
+  /**
+   * sometimes disconnect() is slow and throws the following error https://github.com/chrvadala/node-ble/issues/30
+   * looks like that wait the cb here doesn't solve the issue https://github.com/dbusjs/node-dbus-next/blob/b2a6b89e79de423debb4475452db1cc410beab41/lib/bus.js#L265
+   */
+  await new Promise((resolve, reject) => {
+    setTimeout(resolve, 50)
+  })
 })
 
 test('props/prop', async () => {
