@@ -251,7 +251,7 @@ The name alias for the remote device.
 <a name="Device+getRSSI"></a>
 
 ### device.getRSSI() ⇒ <code>number</code>
-Received Signal Strength Indicator of the remote	device
+Received Signal Strength Indicator of the remote device
 
 **Kind**: instance method of [<code>Device</code>](#Device)  
 <a name="Device+getTXPower"></a>
