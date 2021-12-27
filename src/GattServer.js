@@ -1,6 +1,11 @@
 const BusHelper = require('./BusHelper')
 const GattService = require('./GattService')
 
+/**
+ * @classdesc GattServer class that provides interaction with device GATT profile.
+ * @class GattServer
+ * @see You can construct a Device object via {@link Device#gatt} method
+ */
 class GattServer {
   constructor (dbus, adapter, device) {
     this.dbus = dbus
@@ -29,10 +34,19 @@ class GattServer {
     }
   }
 
+  /**
+   * List of available services
+   * @returns {string[]}
+   */
   async services () {
     return Object.keys(this._services)
   }
 
+  /**
+   * Init a GattService instance and return it
+   * @param {string} uuid
+   * @returns {GattService}
+   */
   async getPrimaryService (uuid) {
     if (uuid in this._services) {
       return this._services[uuid]

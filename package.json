@@ -25,12 +25,14 @@
   ],
   "homepage": "https://github.com/chrvadala/node-ble",
   "scripts": {
+    "build": "npm run docs:api",
     "test": "npm run test:standard && npm run test:coverage && npm run test:typescript",
     "test:jest": "jest --testPathIgnorePatterns=e2e.spec.js",
     "test:coverage": "jest --testPathIgnorePatterns=e2e.spec.js --coverage",
     "test:e2e": "jest",
     "test:standard": "standard",
-    "test:typescript": "tsc --strict src/index.d.ts"
+    "test:typescript": "tsc --strict src/index.d.ts",
+    "docs:api": "jsdoc2md --template docs/templates/api.hbs --example-lang js --heading-depth 2 src/*.js > docs/api.md"
   },
   "dependencies": {
     "dbus-next": "^0.10.2"
@@ -41,6 +43,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.6",
     "jest": "^27.3.1",
+    "jsdoc-to-markdown": "^7.1.0",
     "standard": "^16.0.4",
     "typescript": "^4.4.4"
   },
