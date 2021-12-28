@@ -32,6 +32,7 @@ test('props', async () => {
     Alias: '_alias_',
     RSSI: 100,
     TxPower: 50,
+    ManufacturerData: { '1390': { 'value': 0x3890 } },
 
     Paired: true,
     Connected: true
@@ -43,6 +44,7 @@ test('props', async () => {
   await expect(device.getAlias()).resolves.toEqual('_alias_')
   await expect(device.getRSSI()).resolves.toEqual(100)
   await expect(device.getTXPower()).resolves.toEqual(50)
+  await expect(device.manufacturerData()).resolves.toEqual({ '1390': { 'value': 0x3890 } })
 
   await expect(device.isConnected()).resolves.toEqual(true)
   await expect(device.isPaired()).resolves.toEqual(true)

@@ -1,8 +1,8 @@
 {
-  "name": "node-ble",
+  "name": "@xineyelabo/node-ble",
   "description": "Bluetooth Low Energy (BLE) library written with pure Node.js (no bindings) - baked by Bluez via DBus",
   "version": "1.6.0",
-  "repository": "https://github.com/chrvadala/node-ble.git",
+  "repository": "https://github.com/xineyelabo/node-ble.git",
   "author": "chrvadala",
   "license": "MIT",
   "main": "./src/index.js",
@@ -50,5 +50,8 @@
       "test/__interfaces/*.js"
     ]
   },
-  "funding": "https://www.paypal.me/chrvadala/25"
+  "funding": "https://www.paypal.me/chrvadala/25",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
