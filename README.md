@@ -108,6 +108,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - Raspbian GNU/Linux 10 (buster)
 - Ubuntu 18.04.4 LTS
 - Ubuntu 20.04 LTS
+- Ubuntu 21.10
 
 # Changelog
 - **0.x** - Beta version
