@@ -11,8 +11,15 @@ Bluetooth Low Energy (BLE) library written with pure Node.js (no bindings) - bak
 
 
 # Documentation
+- [Documentation testing](https://github.com/chrvadala/node-ble/blob/main/docs/documentation-testing.md)
 - [APIs](https://github.com/chrvadala/node-ble/blob/main/docs/api.md)
-- [Running Tests](https://github.com/chrvadala/node-ble/blob/main/docs/running-tests.md)
+  - [createBluetooth](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#createBluetooth)
+  - [Bluetooth](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#Bluetooth)
+  - [Adapter](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#Adapter)
+  - [Device](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#Device)
+  - [GattServer](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#GattServer)
+  - [GattService](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#GattService)
+  - [GattCharacteristic](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#GattCharacteristic)
 
 # Install
 ```sh
