@@ -118,7 +118,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.4** - Upgrades deps
 - **1.5** - Adds write options configuration  `async writeValue (value, optionsOrOffset = {})` [#20](https://github.com/chrvadala/node-ble/pull/20); Upgrades deps
 - **1.6** - Upgrades deps and removes some dependencies; migrates to npm; improves gh-actions
-- **1.7** - Fixes compatibility issue [#30](https://github.com/chrvadala/node-ble/issues/30); Adds JSdoc; Deprecates NodeJS 10 and 12;
+- **1.7** - Fixes compatibility issue [#30](https://github.com/chrvadala/node-ble/issues/30); Adds JSdoc; Deprecates NodeJS 10 and 12; Upgrades deps;
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)

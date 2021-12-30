@@ -38,14 +38,14 @@
     "dbus-next": "^0.10.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.16.0",
-    "@babel/plugin-proposal-decorators": "^7.16.0",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.6",
-    "jest": "^27.3.1",
+    "@babel/plugin-proposal-class-properties": "^7.16.5",
+    "@babel/plugin-proposal-decorators": "^7.16.5",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^17.0.5",
+    "jest": "^27.4.5",
     "jsdoc-to-markdown": "^7.1.0",
     "standard": "^16.0.4",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.4"
   },
   "standard": {
     "ignore": [
