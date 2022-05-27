@@ -97,6 +97,13 @@ class BusHelper extends EventEmitter {
     return this._ifaceProxy[methodName](...args)
   }
 
+  removeListeners () {
+    this.removeAllListeners('PropertiesChanged')
+    if (this._propsProxy !== null) {
+      this._propsProxy.removeAllListeners('PropertiesChanged')
+    }
+  }
+
   static buildChildren (path, nodes) {
     if (path === '/') path = ''
     const children = new Set()
