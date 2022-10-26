@@ -43,7 +43,7 @@ test('getPoweredAdapters', async () => {
   bluetooth.getAdapter = async name => adapters[name]
   bluetooth.helper.children.mockReturnValue(['hci0', 'hci1'])
 
-  const result = await bluetooth.poweredAdapters()
+  const result = await bluetooth.activeAdapters()
 
   expect(result.length).toEqual(1)
   await expect(result[0].getName()).resolves.toEqual('hci1')

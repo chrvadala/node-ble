@@ -57,7 +57,7 @@ class Bluetooth {
    * @async
    * @returns {Promise<Adapter[]>}
    */
-  async poweredAdapters () {
+  async activeAdapters () {
     const adapterNames = await this.adapters()
     const allAdapters = await Promise.allSettled(adapterNames.map(async name => {
       const adapter = await this.getAdapter(name)
