@@ -51,6 +51,24 @@ class Bluetooth {
 
     return new Adapter(this.dbus, adapter)
   }
+
+  /**
+   * List all available (powered) adapters
+   * @async
+   * @returns {Promise<Adapter[]>}
+   */
+  async poweredAdapters () {
+    const adapterNames = await this.adapters()
+    const allAdapters = await Promise.allSettled(adapterNames.map(async name => {
+      const adapter = await this.getAdapter(name)
+      const isPowered = await adapter.isPowered()
+      return { adapter, isPowered }
+    }))
+
+    return allAdapters
+      .filter(item => item.status === 'fulfilled' && item.value.isPowered)
+      .map(item => item.value.adapter)
+  }
 }
 
 module.exports = Bluetooth

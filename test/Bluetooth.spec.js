@@ -5,6 +5,7 @@ jest.mock('../src/Adapter')
 
 const Bluetooth = require('../src/Bluetooth')
 const Adapter = require('../src/Adapter')
+const exp = require('constants')
 
 const dbus = Symbol('dbus')
 
@@ -25,6 +26,27 @@ test('getAdapter', async () => {
   const adapter = await bluetooth.getAdapter('hci0')
   expect(adapter).toBeInstanceOf(Adapter)
   expect(Adapter).toHaveBeenCalledWith(dbus, 'hci0')
+})
+
+test('getPoweredAdapters', async () => {
+  const hci0 = new Adapter(dbus, 'hci0')
+  hci0.isPowered = async () => false
+  hci0.getName = async () => 'hci0'
+
+  const hci1 = new Adapter(dbus, 'hci1')
+  hci1.isPowered = async () => true
+  hci1.getName = async () => 'hci1'
+
+  const bluetooth = new Bluetooth(dbus)
+
+  const adapters = { hci0, hci1 }
+  bluetooth.getAdapter = async name => adapters[name]
+  bluetooth.helper.children.mockReturnValue(['hci0', 'hci1'])
+
+  const result = await bluetooth.poweredAdapters()
+
+  expect(result.length).toEqual(1)
+  await expect(result[0].getName()).resolves.toEqual('hci1')
 })
 
 describe('defaultAdapter', () => {
