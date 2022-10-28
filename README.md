@@ -105,11 +105,8 @@ This library works on many architectures supported by Linux.
 It leverages on Bluez driver, a component supported by the following platforms and distributions https://www.bluez.org/about
 
 *Node-ble* has been tested on the following environment:
-- Raspbian GNU/Linux 10 (buster)
-- Ubuntu 18.04.4 LTS
-- Ubuntu 20.04 LTS
-- Ubuntu 21.10
-
+- Raspbian
+- Ubuntu
 # Changelog
 - **0.x** - Beta version
 - **1.0** - First official version
@@ -120,11 +117,13 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.5** - Adds write options configuration  `async writeValue (value, optionsOrOffset = {})` [#20](https://github.com/chrvadala/node-ble/pull/20); Upgrades deps
 - **1.6** - Upgrades deps and removes some dependencies; migrates to npm; improves gh-actions
 - **1.7** - Fixes compatibility issue [#30](https://github.com/chrvadala/node-ble/issues/30); Adds JSdoc; Deprecates NodeJS 10 and 12; Upgrades deps;
+- **1.8** - Upgrades deps and gh-actions os; Adds `Bluetooth.activeAdapters()` func PR[#45](https://github.com/chrvadala/node-ble/pull/45); 
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
 - [pascalopitz](https://github.com/pascalopitz)
 - [lupol](https://github.com/lupol)
+- [altaircunhajr](https://github.com/altaircunhajr)
 
 # References
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
