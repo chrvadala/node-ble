@@ -44,3 +44,26 @@ describe('defaultAdapter', () => {
     expect(Adapter).toHaveBeenCalledWith(dbus, 'hci0')
   })
 })
+
+describe('getActiveAdapters', () => {
+  it('should return only active adapters', async () => {
+    const hci0 = new Adapter(dbus, 'hci0')
+    hci0.isPowered = async () => false
+    hci0.getName = async () => 'hci0'
+
+    const hci1 = new Adapter(dbus, 'hci1')
+    hci1.isPowered = async () => true
+    hci1.getName = async () => 'hci1'
+
+    const bluetooth = new Bluetooth(dbus)
+
+    const adapters = { hci0, hci1 }
+    bluetooth.getAdapter = async name => adapters[name]
+    bluetooth.helper.children.mockReturnValue(['hci0', 'hci1'])
+
+    const result = await bluetooth.activeAdapters()
+
+    expect(result.length).toEqual(1)
+    await expect(result[0].getName()).resolves.toEqual('hci1')
+  })
+})
