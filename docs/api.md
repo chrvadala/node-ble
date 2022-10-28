@@ -168,6 +168,7 @@ Top level object that represent a bluetooth session
     * [.adapters()](#Bluetooth+adapters) ⇒ <code>Array.&lt;string&gt;</code>
     * [.defaultAdapter()](#Bluetooth+defaultAdapter) ⇒ [<code>Adapter</code>](#Adapter)
     * [.getAdapter(adapter)](#Bluetooth+getAdapter) ⇒ [<code>Adapter</code>](#Adapter)
+    * [.activeAdapters()](#Bluetooth+activeAdapters) ⇒ <code>Promise.&lt;Array.&lt;Adapter&gt;&gt;</code>
 
 <a name="Bluetooth+adapters"></a>
 
@@ -197,6 +198,12 @@ Init an adapter instance and returns it
 | --- | --- | --- |
 | adapter | <code>string</code> | Name of an adapter |
 
+<a name="Bluetooth+activeAdapters"></a>
+
+### bluetooth.activeAdapters() ⇒ <code>Promise.&lt;Array.&lt;Adapter&gt;&gt;</code>
+List all available (powered) adapters
+
+**Kind**: instance method of [<code>Bluetooth</code>](#Bluetooth)  
 <a name="Device"></a>
 
 ## Device ⇐ <code>EventEmitter</code>
