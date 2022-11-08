@@ -101,6 +101,7 @@ class BusHelper extends EventEmitter {
     this.removeAllListeners('PropertiesChanged')
     if (this._propsProxy !== null) {
       this._propsProxy.removeAllListeners('PropertiesChanged')
+      this._ready = false
     }
   }
 
