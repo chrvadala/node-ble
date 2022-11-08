@@ -61,7 +61,7 @@ declare namespace NodeBle {
         stopDiscovery(): Promise<void>;
         devices(): Promise<string[]>;
         getDevice(uuid: string): Promise<Device>;
-        waitDevice(uuid: string): Promise<Device>;
+        waitDevice(uuid: string, timeout?: number, discoveryInterval?: number): Promise<Device>;
         toString(): Promise<string>;
     }
 
