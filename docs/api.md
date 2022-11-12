@@ -354,6 +354,8 @@ GattCharacteristic class interacts with a GATT characteristic.
     * [.isNotifying()](#GattCharacteristic+isNotifying) ⇒ <code>boolean</code>
     * [.readValue([offset])](#GattCharacteristic+readValue) ⇒ <code>Buffer</code>
     * [.writeValue(value, [optionsOrOffset])](#GattCharacteristic+writeValue)
+    * [.writeValueWithoutResponse(value, [offset])](#GattCharacteristic+writeValueWithoutResponse) ⇒ <code>Promise</code>
+    * [.writeValueWithResponse(value, [offset])](#GattCharacteristic+writeValueWithResponse) ⇒ <code>Promise</code>
     * [.startNotifications()](#GattCharacteristic+startNotifications)
     * ["valuechanged"](#GattCharacteristic+event_valuechanged)
 
@@ -399,6 +401,30 @@ Write the value of the characteristic.
 | [optionsOrOffset] | <code>number</code> \| <code>Object</code> | <code>0</code> | Starting offset or writing options. |
 | [optionsOrOffset.offset] | <code>number</code> | <code>0</code> | Starting offset. |
 | [optionsOrOffset.type] | [<code>WritingMode</code>](#WritingMode) | <code>reliable</code> | Writing mode |
+
+<a name="GattCharacteristic+writeValueWithoutResponse"></a>
+
+### gattCharacteristic.writeValueWithoutResponse(value, [offset]) ⇒ <code>Promise</code>
+Write the value of the characteristic without waiting for the response.
+
+**Kind**: instance method of [<code>GattCharacteristic</code>](#GattCharacteristic)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| value | <code>Buffer</code> |  | Buffer containing the characteristic value. |
+| [offset] | <code>number</code> | <code>0</code> | Starting offset. |
+
+<a name="GattCharacteristic+writeValueWithResponse"></a>
+
+### gattCharacteristic.writeValueWithResponse(value, [offset]) ⇒ <code>Promise</code>
+Write the value of the characteristic and wait for the response.
+
+**Kind**: instance method of [<code>GattCharacteristic</code>](#GattCharacteristic)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| value | <code>Buffer</code> |  | Buffer containing the characteristic value. |
+| [offset] | <code>number</code> | <code>0</code> | Starting offset. |
 
 <a name="GattCharacteristic+startNotifications"></a>
 
