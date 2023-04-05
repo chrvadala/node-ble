@@ -51,6 +51,7 @@ declare namespace NodeBle {
 
         on(event: 'connect', listener: (state: ConnectionState) => void): this;
         on(event: 'disconnect', listener: (state: ConnectionState) => void): this;
+        on(event: 'manufacturerData', listener: (value: {[key:string]:any}) => void): this;
     }
 
     interface Adapter {

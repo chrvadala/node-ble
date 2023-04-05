@@ -81,7 +81,8 @@ class Adapter {
     }
 
     await this.helper.callMethod('SetDiscoveryFilter', {
-      Transport: buildTypedValue('string', 'le')
+      Transport: buildTypedValue('string', 'le'),
+      DuplicateData: buildTypedValue('boolean', false)
     })
     await this.helper.callMethod('StartDiscovery')
   }

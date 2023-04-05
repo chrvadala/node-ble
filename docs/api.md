@@ -232,6 +232,7 @@ Device class interacts with a remote device.
     * [.toString()](#Device+toString) ⇒ <code>string</code>
     * ["connect"](#Device+event_connect)
     * ["disconnect"](#Device+event_disconnect)
+    * ["manufacturerData"](#Device+event_manufacturerData)
 
 <a name="Device+getName"></a>
 
@@ -352,6 +353,18 @@ Disconection event
 | Name | Type | Description |
 | --- | --- | --- |
 | connected | <code>boolean</code> | Indicates current connection status. |
+
+<a name="Device+event_manufacturerData"></a>
+
+### "manufacturerData"
+ManufacturerData event
+
+**Kind**: event emitted by [<code>Device</code>](#Device)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| manufacturerData | <code>Object.&lt;string, any&gt;</code> | Received manufacturer data |
 
 <a name="GattCharacteristic"></a>
 
