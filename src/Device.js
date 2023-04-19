@@ -26,6 +26,14 @@ class Device extends EventEmitter {
           this.emit('manufacturerData', value)
         }
       }
+      if ('Connected' in propertiesChanged) {
+        const { value } = propertiesChanged.Connected
+        if (value) {
+          this.emit('connect', { connected: true })
+        } else {
+          this.emit('disconnect', { connected: false })
+        }
+      }
     })
   }
 
@@ -127,18 +135,6 @@ class Device extends EventEmitter {
    * Connect to remote device
    */
   async connect () {
-    const cb = (propertiesChanged) => {
-      if ('Connected' in propertiesChanged) {
-        const { value } = propertiesChanged.Connected
-        if (value) {
-          this.emit('connect', { connected: true })
-        } else {
-          this.emit('disconnect', { connected: false })
-        }
-      }
-    }
-
-    this.helper.on('PropertiesChanged', cb)
     await this.helper.callMethod('Connect')
   }
 
@@ -147,7 +143,6 @@ class Device extends EventEmitter {
    */
   async disconnect () {
     await this.helper.callMethod('Disconnect')
-    this.helper.removeAllListeners('PropertiesChanged') // might be improved
   }
 
   /**
