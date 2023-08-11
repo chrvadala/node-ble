@@ -56,6 +56,21 @@ test('discovering methods', async () => {
   await expect(adapter.startDiscovery()).rejects.toThrow('Discovery already in progress')
 
   expect(adapter.helper.callMethod).toHaveBeenCalledTimes(1)
+
+  isDiscovering = false
+  await expect(adapter.startDiscovery('test')).rejects.toThrow('Wrong parameter')
+
+  await expect(adapter.startDiscovery()).resolves.toBeUndefined()
+  expect(adapter.helper.callMethod).toHaveBeenCalledWith('SetDiscoveryFilter', {
+    Transport:  { signature: 's', value: 'le' },
+    DuplicateData:  { signature: 'b', value: true },
+  })
+
+  await expect(adapter.startDiscovery({ transport: 'auto', duplicateData: false })).resolves.toBeUndefined()
+  expect(adapter.helper.callMethod).toHaveBeenCalledWith('SetDiscoveryFilter', {
+    Transport:  { signature: 's', value: 'auto' },
+    DuplicateData:  { signature: 'b', value: false },
+  })
 })
 
 test('devices', async () => {
