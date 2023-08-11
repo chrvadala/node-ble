@@ -62,14 +62,14 @@ test('discovering methods', async () => {
 
   await expect(adapter.startDiscovery()).resolves.toBeUndefined()
   expect(adapter.helper.callMethod).toHaveBeenCalledWith('SetDiscoveryFilter', {
-    Transport:  { signature: 's', value: 'le' },
-    DuplicateData:  { signature: 'b', value: true },
+    Transport: { signature: 's', value: 'le' },
+    DuplicateData: { signature: 'b', value: true }
   })
 
   await expect(adapter.startDiscovery({ transport: 'auto', duplicateData: false })).resolves.toBeUndefined()
   expect(adapter.helper.callMethod).toHaveBeenCalledWith('SetDiscoveryFilter', {
-    Transport:  { signature: 's', value: 'auto' },
-    DuplicateData:  { signature: 'b', value: false },
+    Transport: { signature: 's', value: 'auto' },
+    DuplicateData: { signature: 'b', value: false }
   })
 })
 
