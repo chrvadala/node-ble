@@ -8,7 +8,7 @@ declare namespace NodeBle {
         readValue(offset?: number): Promise<Buffer>;
         writeValue(buffer: Buffer, optionsOrOffset?: number | WriteValueOptions): Promise<void>;
         writeValueWithoutResponse(buffer: Buffer, offset?: number): Promise<void>;
-        writeValueWithResponse(buffer: Buffer, offset? number): Promise<void>;
+        writeValueWithResponse(buffer: Buffer, offset?: number): Promise<void>;
         startNotifications(): Promise<void>;
         stopNotifications(): Promise<void>;
         toString(): Promise<string>;
