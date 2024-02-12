@@ -10,6 +10,7 @@ const Device = require('../src/Device')
 
 test('serializeUUID', () => {
   expect(Adapter.serializeUUID('00:00:00:00:00:00')).toEqual('dev_00_00_00_00_00_00')
+  expect(Adapter.serializeUUID('aa:BB:cc:DD:ee:FF')).toEqual('dev_AA_BB_CC_DD_EE_FF')
 })
 
 test('deserializeUUID', () => {
