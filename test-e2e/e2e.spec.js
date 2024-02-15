@@ -5,8 +5,8 @@ const { createBluetooth } = require('..')
 const TEST_SERVICE = '12345678-1234-5678-1234-56789abcdef0' // FOR READ/WRITE TESTING
 const TEST_CHARACTERISTIC = '12345678-1234-5678-1234-56789abcdef1' // FOR READ/WRITE TESTING
 
-const TEST_NOTIFY_SERVICE = '0000180d-0000-1000-8000-00805f9b34fb' // FOR NOTIFY TESTING
-const TEST_NOTIFY_CHARACTERISTIC = '00002a37-0000-1000-8000-00805f9b34fb' // FOR NOTIFY TESTING
+const TEST_NOTIFY_SERVICE = '12345678-1234-5678-1234-56789abcdef0' // FOR NOTIFY TESTING
+const TEST_NOTIFY_CHARACTERISTIC = '12345678-1234-5678-1234-56789abcdef2' // FOR NOTIFY TESTING
 
 const TEST_DEVICE = getTestDevice()
 
@@ -83,11 +83,13 @@ describe('gatt e2e', () => {
   })
 
   test('read/write value', async () => {
-    const string = Buffer.from(`hello_world_${new Date().toISOString()}`)
+    const now = new Date().toISOString()
+    const string = Buffer.from(`hello_world_${now}`)
+    const expected = Buffer.from(`ECHO>hello_world_${now}`)
 
     await characteristic.writeValue(string)
     const value = await characteristic.readValue()
-    expect(value).toEqual(string)
+    expect(value).toEqual(expected)
     console.log({ value: value.toString() })
   })
 
@@ -106,14 +108,16 @@ describe('gatt e2e', () => {
     })
     await notifiableCharacteristic.startNotifications()
 
-    const res = new Promise(resolve => {
+    const res = await new Promise(resolve => {
       notifiableCharacteristic.on('valuechanged', buffer => {
-        console.log({ notifiedBuffer: buffer })
+        console.log({ notifiedBuffer: buffer, string: buffer.toString() })
         resolve(buffer)
       })
     })
 
-    await expect(res).resolves.toBeInstanceOf(Buffer)
+    console.log({ notifiedString: res.toString() })
+    expect(res).toBeInstanceOf(Buffer)
+    expect(res.toString().startsWith('Notification data')).toBeTruthy()
 
     await notifiableCharacteristic.stopNotifications()
   })

@@ -31,17 +31,11 @@ npm test
 ## Run end to end (e2e) tests
 
 The end to end test will try to connect to a real bluetooth device and read some characteristics. To do that, you need two different devices.
+Prior to that, you need to create a test device. [A guide is available 
+here](https://github.com/chrvadala/node-ble/blob/main/ble-test-device).
 
-#### Device 1
-```shell script
-wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-advertisement
-wget https://git.kernel.org/pub/scm/bluetooth/bluez.git/plain/test/example-gatt-server
-python example-advertisement
-python example-gatt-server
-hcitool dev #this command shows bluetooth address
-```
+After you have prepared the device, you have to connect it via bluetooth and read its MAC Address, then launch...
 
-#### Device 2
 ```shell script
 TEST_DEVICE=00:00:00:00:00:00 npm run test:e2e
 ```
