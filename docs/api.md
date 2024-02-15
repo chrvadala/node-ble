@@ -220,6 +220,8 @@ Device class interacts with a remote device.
     * [.getAlias()](#Device+getAlias) ⇒ <code>string</code>
     * [.getRSSI()](#Device+getRSSI) ⇒ <code>number</code>
     * [.getTXPower()](#Device+getTXPower) ⇒ <code>number</code>
+    * [.getManufacturerData()](#Device+getManufacturerData) ⇒ <code>Object.&lt;string, any&gt;</code>
+    * [.getAdvertisingData()](#Device+getAdvertisingData) ⇒ <code>Object.&lt;string, any&gt;</code>
     * [.isPaired()](#Device+isPaired) ⇒ <code>boolean</code>
     * [.isConnected()](#Device+isConnected) ⇒ <code>boolean</code>
     * [.pair()](#Device+pair)
@@ -230,6 +232,7 @@ Device class interacts with a remote device.
     * [.toString()](#Device+toString) ⇒ <code>string</code>
     * ["connect"](#Device+event_connect)
     * ["disconnect"](#Device+event_disconnect)
+    * ["manufacturerData"](#Device+event_manufacturerData)
 
 <a name="Device+getName"></a>
 
@@ -265,6 +268,18 @@ Received Signal Strength Indicator of the remote device
 
 ### device.getTXPower() ⇒ <code>number</code>
 Advertised transmitted power level.
+
+**Kind**: instance method of [<code>Device</code>](#Device)  
+<a name="Device+getManufacturerData"></a>
+
+### device.getManufacturerData() ⇒ <code>Object.&lt;string, any&gt;</code>
+Advertised transmitted manufacturer data.
+
+**Kind**: instance method of [<code>Device</code>](#Device)  
+<a name="Device+getAdvertisingData"></a>
+
+### device.getAdvertisingData() ⇒ <code>Object.&lt;string, any&gt;</code>
+Advertised transmitted data.
 
 **Kind**: instance method of [<code>Device</code>](#Device)  
 <a name="Device+isPaired"></a>
@@ -338,6 +353,18 @@ Disconection event
 | Name | Type | Description |
 | --- | --- | --- |
 | connected | <code>boolean</code> | Indicates current connection status. |
+
+<a name="Device+event_manufacturerData"></a>
+
+### "manufacturerData"
+ManufacturerData event
+
+**Kind**: event emitted by [<code>Device</code>](#Device)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| manufacturerData | <code>Object.&lt;string, any&gt;</code> | Received manufacturer data |
 
 <a name="GattCharacteristic"></a>
 

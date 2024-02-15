@@ -39,6 +39,9 @@ declare namespace NodeBle {
         getAddressType(): Promise<string>;
         getAlias(): Promise<string>;
         getRSSI(): Promise<string>;
+        getTXPower(): Promise<string>;
+        getManufacturerData(): Promise<{[key:string]:any}>;
+        getAdvertisingData(): Promise<{[key:string]:any}>;
         isPaired(): Promise<string>;
         isConnected(): Promise<string>;
         pair(): Promise<void>;
@@ -50,6 +53,7 @@ declare namespace NodeBle {
 
         on(event: 'connect', listener: (state: ConnectionState) => void): this;
         on(event: 'disconnect', listener: (state: ConnectionState) => void): this;
+        on(event: 'manufacturerData', listener: (value: {[key:string]:any}) => void): this;
     }
 
     interface Adapter {
@@ -59,7 +63,7 @@ declare namespace NodeBle {
         getAlias(): Promise<string>;
         isPowered(): Promise<boolean>;
         isDiscovering(): Promise<boolean>;
-        startDiscovery(): Promise<void>;
+        startDiscovery(options?: {transport?: string, duplicateData?: boolean}): Promise<void>;
         stopDiscovery(): Promise<void>;
         devices(): Promise<string[]>;
         getDevice(uuid: string): Promise<Device>;
@@ -71,7 +75,7 @@ declare namespace NodeBle {
         adapters(): Promise<string[]>;
         defaultAdapter(): Promise<Adapter>;
         getAdapter(adapter: string): Promise<Adapter>;
-    } 
+    }
 
     function createBluetooth(): {
         destroy(): void;

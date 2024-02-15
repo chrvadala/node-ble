@@ -75,13 +75,17 @@ class Adapter {
    * This method starts the device discovery session.
    * @async
    */
-  async startDiscovery () {
+  async startDiscovery (options = {}) {
     if (await this.isDiscovering()) {
       throw new Error('Discovery already in progress')
     }
-
+    if (typeof options !== 'object') {
+      throw new Error('Wrong parameter')
+    }
+    options = Object.assign({ transport: 'le', duplicateData: true }, options)
     await this.helper.callMethod('SetDiscoveryFilter', {
-      Transport: buildTypedValue('string', 'le')
+      Transport: buildTypedValue('string', options.transport),
+      DuplicateData: buildTypedValue('boolean', options.duplicateData)
     })
     await this.helper.callMethod('StartDiscovery')
   }
