@@ -119,6 +119,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - **1.7** - Fixes compatibility issue [#30](https://github.com/chrvadala/node-ble/issues/30); Adds JSdoc; Deprecates NodeJS 10 and 12; Upgrades deps;
 - **1.8** - Upgrades deps and gh-actions os; Adds `Bluetooth.activeAdapters()` func [#45](https://github.com/chrvadala/node-ble/pull/45); 
 - **1.9** - Upgrades deps; Adds `writeValueWithoutResponse()` and `writeValueWithResponse` methods [#47](https://github.com/chrvadala/node-ble/pull/47); Improves typescript definition [#48](https://github.com/chrvadala/node-ble/pull/48) 
+- **1.10** - Upgrades deps and gh-actions; Fixes memory leak [#37](https://github.com/chrvadala/node-ble/pull/37); Makes MAC Address case insensitive
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)

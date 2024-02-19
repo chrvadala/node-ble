@@ -1,8 +1,8 @@
 # Running tests
 
 This library provides two test suites:
-- Unit tests: Their available in the `/test` folder and they test every single component.
-- End to end tests: They're available in the `/test-e2e` folder and they test the interaction with a real bluetooth device that you spawn on your own.
+- Unit tests: They are available in the `/test` folder and they test every single component.
+- End to end tests: They are available in the `/test-e2e` folder and they test the interaction with a real bluetooth device that you spawn on your own.
 
 
 ## Pre-requisite
@@ -31,10 +31,9 @@ npm test
 ## Run end to end (e2e) tests
 
 The end to end test will try to connect to a real bluetooth device and read some characteristics. To do that, you need two different devices.
-Prior to that, you need to create a test device. [A guide is available 
-here](https://github.com/chrvadala/node-ble/blob/main/ble-test-device).
+Prior to that, you need to create a test device via [installation guide](https://github.com/chrvadala/node-ble/blob/main/ble-test-device).
 
-After you have prepared the device, you have to connect it via bluetooth and read its MAC Address, then launch...
+After you have prepared the device, you have to read via USB its mac address, then lunch the test suite.
 
 ```shell script
 TEST_DEVICE=00:00:00:00:00:00 npm run test:e2e
