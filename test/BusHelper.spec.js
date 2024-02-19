@@ -125,3 +125,31 @@ test('propsEvents', async () => {
   await helper.set('VirtualProperty', buildTypedValue('string', 'bar'))
   await expect(res).resolves.toMatchObject({ VirtualProperty: { signature: 's', value: 'bar' } })
 })
+
+test('removeListeners', async () => {
+  const helper = new BusHelper(dbus, TEST_NAME, TEST_OBJECT, TEST_IFACE, { useProps: true, usePropsEvents: true })
+
+  const dummyCb = () => {}
+
+  // Init with listener on helper (directly attached dummyCb) and _propsProxy (through method call triggered _prepare)
+  helper.on('PropertiesChanged', dummyCb)
+  await helper.callMethod('Echo', 'ping')
+  expect(helper.listenerCount('PropertiesChanged')).toBeGreaterThan(0)
+  expect(helper._propsProxy.listenerCount('PropertiesChanged')).toBeGreaterThan(0)
+
+  // Test remove
+  helper.removeListeners()
+  expect(helper.listenerCount('PropertiesChanged')).toBe(0)
+  expect(helper._propsProxy.listenerCount('PropertiesChanged')).toBe(0)
+
+  // Test reuse after remove (same initialization as before)
+  helper.on('PropertiesChanged', dummyCb)
+  await helper.callMethod('Echo', 'ping')
+  expect(helper.listenerCount('PropertiesChanged')).toBeGreaterThan(0)
+  expect(helper._propsProxy.listenerCount('PropertiesChanged')).toBeGreaterThan(0)
+
+  // Remove second time
+  helper.removeListeners()
+  expect(helper.listenerCount('PropertiesChanged')).toBe(0)
+  expect(helper._propsProxy.listenerCount('PropertiesChanged')).toBe(0)
+})
