@@ -27,8 +27,8 @@
   "scripts": {
     "build": "npm run docs:api",
     "test": "npm run test:standard && npm run test:coverage && npm run test:typescript",
-    "test:jest": "jest --testPathIgnorePatterns=e2e.spec.js",
-    "test:coverage": "jest --testPathIgnorePatterns=e2e.spec.js --coverage",
+    "test:jest": "jest --testPathIgnorePatterns=test-e2e/",
+    "test:coverage": "jest --testPathIgnorePatterns=test-e2e/ --coverage",
     "test:e2e": "jest",
     "test:standard": "standard",
     "test:typescript": "tsc --strict src/index.d.ts",
