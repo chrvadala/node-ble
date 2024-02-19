@@ -128,6 +128,7 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - [altaircunhajr](https://github.com/altaircunhajr)
 - [derwehr](https://github.com/derwehr)
 - [mxc42](https://github.com/mxc42)
+- [tuxedoxt](https://github.com/tuxedoxt)
 
 # References
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
