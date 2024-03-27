@@ -66,6 +66,22 @@ class Device extends EventEmitter {
   }
 
   /**
+   * Advertised transmitted manufacturer data.
+   * @returns {Object.<string, any>}
+   */
+  async getManufacturerData () {
+    return this.helper.prop('ManufacturerData')
+  }
+
+  /**
+   * Advertised transmitted data.
+   * @returns {Object.<string, any>}
+   */
+  async getAdvertisingData () {
+    return this.helper.prop('AdvertisingData')
+  }
+
+  /**
    * Indicates if the remote device is paired.
    * @returns {boolean}
    */

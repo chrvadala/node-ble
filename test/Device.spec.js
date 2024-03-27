@@ -33,7 +33,8 @@ test('props', async () => {
     Alias: '_alias_',
     RSSI: 100,
     TxPower: 50,
-
+    ManufacturerData: { 1: { signature: 'ay', value: { type: 'Buffer', data: Buffer.from('test') } } },
+    AdvertisingData: { 2: { signature: 'ay', value: { type: 'Buffer', data: Buffer.from('test') } } },
     Paired: true,
     Connected: true
   }[value])))
@@ -44,6 +45,8 @@ test('props', async () => {
   await expect(device.getAlias()).resolves.toEqual('_alias_')
   await expect(device.getRSSI()).resolves.toEqual(100)
   await expect(device.getTXPower()).resolves.toEqual(50)
+  await expect(device.getManufacturerData()).resolves.toMatchObject({ 1: { signature: 'ay', value: { type: 'Buffer', data: Buffer.from('test') } } })
+  await expect(device.getAdvertisingData()).resolves.toMatchObject({ 2: { signature: 'ay', value: { type: 'Buffer', data: Buffer.from('test') } } })
 
   await expect(device.isConnected()).resolves.toEqual(true)
   await expect(device.isPaired()).resolves.toEqual(true)
