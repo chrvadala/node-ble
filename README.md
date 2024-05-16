@@ -131,9 +131,9 @@ It leverages on Bluez driver, a component supported by the following platforms a
 - [tuxedoxt](https://github.com/tuxedoxt)
 
 # References
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt
-- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt?h=5.64
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt?h=5.64
+- https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/gatt-api.txt?h=5.64
 - https://webbluetoothcg.github.io/web-bluetooth - method signatures follow, when possible, WebBluetooth standards
 - https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web - method signatures follow, when possible, WebBluetooth standards
 
