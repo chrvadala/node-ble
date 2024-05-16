@@ -39,6 +39,8 @@ declare namespace NodeBle {
         getAddressType(): Promise<string>;
         getAlias(): Promise<string>;
         getRSSI(): Promise<string>;
+        getManufacturerData(): Promise<{[key:string]:any}>;
+        getAdvertisingData(): Promise<{[key:string]:any}>;
         isPaired(): Promise<string>;
         isConnected(): Promise<string>;
         pair(): Promise<void>;
@@ -71,7 +73,7 @@ declare namespace NodeBle {
         adapters(): Promise<string[]>;
         defaultAdapter(): Promise<Adapter>;
         getAdapter(adapter: string): Promise<Adapter>;
-    } 
+    }
 
     function createBluetooth(): {
         destroy(): void;
