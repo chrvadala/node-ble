@@ -21,6 +21,16 @@ Bluetooth Low Energy (BLE) library written with pure Node.js (no bindings) - bak
   - [GattService](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#GattService)
   - [GattCharacteristic](https://github.com/chrvadala/node-ble/blob/main/docs/api.md#GattCharacteristic)
 
+# Pre-requisites
+This library works on many architectures supported by Linux. However Windows and Mac OS are [*not* supported](https://github.com/chrvadala/node-ble/issues/31).
+
+It leverages the `bluez` driver, a component supported by the following platforms and distributions <https://www.bluez.org/about>.
+
+*node-ble* has been tested on the following architectures:
+- Raspbian
+- Ubuntu
+- Debian
+
 # Install
 ```sh
 npm install node-ble
@@ -100,13 +110,6 @@ await device.disconnect()
 destroy()
 ```
 
-# Compatibility
-This library works on many architectures supported by Linux.
-It leverages on Bluez driver, a component supported by the following platforms and distributions https://www.bluez.org/about
-
-*Node-ble* has been tested on the following environment:
-- Raspbian
-- Ubuntu
 # Changelog
 - **0.x** - Beta version
 - **1.0** - First official version
