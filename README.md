@@ -133,6 +133,8 @@ destroy()
 - [derwehr](https://github.com/derwehr)
 - [mxc42](https://github.com/mxc42)
 - [tuxedoxt](https://github.com/tuxedoxt)
+- [raffone17](https://github.com/Raffone17)
+- [gmacario](https://github.com/gmacario)
 - [ianchanning](https://github.com/ianchanning)
 
 # References
