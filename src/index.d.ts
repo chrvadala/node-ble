@@ -41,6 +41,7 @@ declare namespace NodeBle {
         getRSSI(): Promise<string>;
         getManufacturerData(): Promise<{[key:string]:any}>;
         getAdvertisingData(): Promise<{[key:string]:any}>;
+        getServiceData(): Promise<{[key:string]:any}>;
         isPaired(): Promise<string>;
         isConnected(): Promise<string>;
         pair(): Promise<void>;
