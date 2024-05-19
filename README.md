@@ -123,6 +123,7 @@ destroy()
 - **1.8** - Upgrades deps and gh-actions os; Adds `Bluetooth.activeAdapters()` func [#45](https://github.com/chrvadala/node-ble/pull/45); 
 - **1.9** - Upgrades deps; Adds `writeValueWithoutResponse()` and `writeValueWithResponse` methods [#47](https://github.com/chrvadala/node-ble/pull/47); Improves typescript definition [#48](https://github.com/chrvadala/node-ble/pull/48) 
 - **1.10** - Upgrades deps and gh-actions; Fixes memory leak [#37](https://github.com/chrvadala/node-ble/pull/37); Makes MAC Address case insensitive
+- **1.11** - Upgrades deps; Fixes doc [#69](https://github.com/chrvadala/node-ble/pull/69); Adds `getManufacturerData` and `getAdvertisingData`  functions on `Device` [#67](https://github.com/chrvadala/node-ble/pull/67); Adds `getServiceData` functions on `Device`; Improves pre-requisite doc section [#68](https://github.com/chrvadala/node-ble/pull/68)
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
@@ -132,6 +133,7 @@ destroy()
 - [derwehr](https://github.com/derwehr)
 - [mxc42](https://github.com/mxc42)
 - [tuxedoxt](https://github.com/tuxedoxt)
+- [ianchanning](https://github.com/ianchanning)
 
 # References
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt?h=5.64
