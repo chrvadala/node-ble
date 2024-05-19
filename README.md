@@ -31,10 +31,6 @@ It leverages the `bluez` driver, a component supported by the following platform
 - Ubuntu
 - Debian
 
-```sh
-sudo apt install dbus bluetooth bluez libbluetooth-dev libudev-dev
-```
-
 # Install
 ```sh
 npm install node-ble
