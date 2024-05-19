@@ -1,6 +1,7 @@
 const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
 const GattServer = require('./GattServer')
+const parseDict = require('./parseDict')
 
 /**
  * @classdesc Device class interacts with a remote device.
@@ -70,15 +71,23 @@ class Device extends EventEmitter {
    * @returns {Object.<string, any>}
    */
   async getManufacturerData () {
-    return this.helper.prop('ManufacturerData')
+    return parseDict(await this.helper.prop('ManufacturerData'))
+  }
+
+  /**
+   * Advertised transmitted data. (experimental: this feature might not be fully supported by bluez)
+   * @returns {Object.<string, any>}
+   */
+  async getAdvertisingData () {
+    return parseDict(await this.helper.prop('AdvertisingData'))
   }
 
   /**
    * Advertised transmitted data.
    * @returns {Object.<string, any>}
    */
-  async getAdvertisingData () {
-    return this.helper.prop('AdvertisingData')
+  async getServiceData () {
+    return parseDict(await this.helper.prop('ServiceData'))
   }
 
   /**

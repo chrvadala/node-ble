@@ -222,6 +222,7 @@ Device class interacts with a remote device.
     * [.getTXPower()](#Device+getTXPower) ⇒ <code>number</code>
     * [.getManufacturerData()](#Device+getManufacturerData) ⇒ <code>Object.&lt;string, any&gt;</code>
     * [.getAdvertisingData()](#Device+getAdvertisingData) ⇒ <code>Object.&lt;string, any&gt;</code>
+    * [.getServiceData()](#Device+getServiceData) ⇒ <code>Object.&lt;string, any&gt;</code>
     * [.isPaired()](#Device+isPaired) ⇒ <code>boolean</code>
     * [.isConnected()](#Device+isConnected) ⇒ <code>boolean</code>
     * [.pair()](#Device+pair)
@@ -278,6 +279,12 @@ Advertised transmitted manufacturer data.
 <a name="Device+getAdvertisingData"></a>
 
 ### device.getAdvertisingData() ⇒ <code>Object.&lt;string, any&gt;</code>
+Advertised transmitted data. (experimental: this feature might not be fully supported by bluez)
+
+**Kind**: instance method of [<code>Device</code>](#Device)  
+<a name="Device+getServiceData"></a>
+
+### device.getServiceData() ⇒ <code>Object.&lt;string, any&gt;</code>
 Advertised transmitted data.
 
 **Kind**: instance method of [<code>Device</code>](#Device)  
