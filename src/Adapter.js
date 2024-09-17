@@ -161,12 +161,14 @@ class Adapter {
       cancellable.push(() => clearTimeout(handler))
     })
 
-    const device = await Promise.race([discoveryHandler, timeoutHandler])
-
-    for (const cancel of cancellable) {
-      cancel()
+    try {
+      const device = await Promise.race([discoveryHandler, timeoutHandler])
+      return device
+    } finally {
+      for (const cancel of cancellable) {
+        cancel()
+      }
     }
-    return device
   }
 
   /**
