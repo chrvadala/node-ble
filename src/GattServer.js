@@ -54,38 +54,38 @@ class GattServer {
 
     throw new Error('Service not available')
   }
-  
+
   /**
    * Find the service UUID and characteristic UUID based on a characteristic handle
    * @param {number} charHandle
-   * @returns {<Object|null>}
+   * @returns {Object|null}
    */
-  async getUUIDbyHandle(charHandle) {
-    const handle = charHandle - 1;
-    const handleStr = 'char' + handle.toString(16).padStart(4, '0');
+  async getUUIDbyHandle (charHandle) {
+    const handle = charHandle - 1
+    const handleStr = 'char' + handle.toString(16).padStart(4, '0')
 
     for (const key in this.dbus._matchRules) {
       if (key.includes(handleStr)) {
-        const match = key.match(/service[0-9a-fA-F]+/);
+        const match = key.match(/service[0-9a-fA-F]+/)
         if (match) {
-          const service = match[0];
-          const services = this._services;
+          const service = match[0]
+          const services = this._services
           for (const skey in services) {
             if (services[skey].service === service) {
-              const characteristics = services[skey]._characteristics;
+              const characteristics = services[skey]._characteristics
               for (const ckey in characteristics) {
                 if (characteristics[ckey].characteristic === handleStr) {
-                  return { 'service': skey, 'char': ckey };
+                  return { service: skey, char: ckey }
                 }
               }
-              return null;
+              return null
             }
           }
         }
       }
     }
-    return null;
-  }  
+    return null
+  }
 }
 
 module.exports = GattServer
