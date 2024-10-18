@@ -29,7 +29,7 @@
     "test": "npm run test:standard && npm run test:coverage && npm run test:typescript",
     "test:jest": "jest --testPathIgnorePatterns=test-e2e/",
     "test:coverage": "jest --testPathIgnorePatterns=test-e2e/ --coverage",
-    "test:e2e": "jest",
+    "test:e2e": "jest --runInBand",
     "test:standard": "standard",
     "test:typescript": "tsc --strict src/index.d.ts",
     "docs:api": "jsdoc2md --template docs/templates/api.hbs --example-lang js --heading-depth 2 src/*.js > docs/api.md"
