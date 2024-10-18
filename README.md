@@ -157,3 +157,4 @@ destroy()
 | hcitool dev | Adapter info (through Bluez) |
 | d-feet | DBus debugging tool |
 | nvram bluetoothHostControllerSwitchBehavior=never | Only on Parallels |
+| inxi --bluetooth -z | Bluetooth device info |
