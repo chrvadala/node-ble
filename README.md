@@ -124,6 +124,7 @@ destroy()
 - **1.9** - Upgrades deps; Adds `writeValueWithoutResponse()` and `writeValueWithResponse` methods [#47](https://github.com/chrvadala/node-ble/pull/47); Improves typescript definition [#48](https://github.com/chrvadala/node-ble/pull/48) 
 - **1.10** - Upgrades deps and gh-actions; Fixes memory leak [#37](https://github.com/chrvadala/node-ble/pull/37); Makes MAC Address case insensitive
 - **1.11** - Upgrades deps; Fixes doc [#69](https://github.com/chrvadala/node-ble/pull/69); Adds `getManufacturerData` and `getAdvertisingData`  functions on `Device` [#67](https://github.com/chrvadala/node-ble/pull/67); Adds `getServiceData` functions on `Device`; Improves pre-requisite doc section [#68](https://github.com/chrvadala/node-ble/pull/68)
+- **1.12** - Upgrades deps and actions; Fix memory leak [#75](https://github.com/chrvadala/node-ble/pull/75)
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
