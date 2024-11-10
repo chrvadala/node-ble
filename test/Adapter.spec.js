@@ -142,4 +142,31 @@ describe('waitDevice', () => {
 
     return res
   })
+
+  test('clear intervals and timeouts after fail', async () => {
+    jest.useFakeTimers()
+
+    const adapter = new Adapter(dbus, 'hci0')
+
+    adapter.helper.children.mockResolvedValue([
+      'dev_11_11_11_11_11_11',
+      'dev_22_22_22_22_22_22',
+      'dev_33_33_33_33_33_33'
+    ])
+
+    const timeout = 500
+    const discoveryInterval = 100
+
+    const spyClearInterval = jest.spyOn(global, 'clearInterval')
+    const spyClearTimeout = jest.spyOn(global, 'clearTimeout')
+
+    const waitDevicePromise = adapter.waitDevice('44:44:44:44:44:44', timeout, discoveryInterval)
+
+    jest.advanceTimersByTime(timeout)
+
+    await expect(waitDevicePromise).rejects.toThrow('operation timed out')
+
+    expect(spyClearInterval).toHaveBeenCalled()
+    expect(spyClearTimeout).toHaveBeenCalled()
+  })
 })
