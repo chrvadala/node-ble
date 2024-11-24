@@ -105,8 +105,6 @@ class GattCharacteristic extends EventEmitter {
    * It emits valuechanged event when receives a notification.
    */
   async startNotifications () {
-    await this.helper.callMethod('StartNotify')
-
     const cb = (propertiesChanged) => {
       if ('Value' in propertiesChanged) {
         const { value } = propertiesChanged.Value
@@ -115,6 +113,10 @@ class GattCharacteristic extends EventEmitter {
     }
 
     this.helper.on('PropertiesChanged', cb)
+
+    // Call StartNotify after the listener is attached in order not to lose
+    // the first notifications of the device.
+    await this.helper.callMethod('StartNotify')
   }
 
   async stopNotifications () {

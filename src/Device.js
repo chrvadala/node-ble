@@ -107,6 +107,30 @@ class Device extends EventEmitter {
   }
 
   /**
+   * Service advertisement data. Keys are the UUIDs in string format followed by its byte array value.
+   * @returns {object}
+   */
+  async getServiceAdvertisementData () {
+    return this.helper.prop('ServiceData')
+  }
+
+  /**
+   * Manufacturer specific advertisement data. Keys are 16 bits Manufacturer ID followed by its byte array value.
+   * @returns {object}
+   */
+  async getManufacturerAdvertisementData () {
+    return this.helper.prop('ManufacturerData')
+  }
+
+  /**
+   * List of 128-bit UUIDs that represents the available remote services.
+   * @returns {string[]}
+   */
+  async getServiceUUIDs () {
+    return this.helper.prop('UUIDs')
+  }
+
+  /**
    * This method will connect to the remote device
    */
   async pair () {
@@ -128,9 +152,10 @@ class Device extends EventEmitter {
       if ('Connected' in propertiesChanged) {
         const { value } = propertiesChanged.Connected
         if (value) {
-          this.emit('connect', { connected: true })
+          this.emit('connect', { connected: true, deviceUuid: this.device })
         } else {
-          this.emit('disconnect', { connected: false })
+          this.emit('disconnect', { connected: false, deviceUuid: this.device })
+          this.helper.removeAllListeners('PropertiesChanged') // might be improved
         }
       }
     }
@@ -144,7 +169,6 @@ class Device extends EventEmitter {
    */
   async disconnect () {
     await this.helper.callMethod('Disconnect')
-    this.helper.removeListeners()
   }
 
   /**
@@ -175,6 +199,7 @@ class Device extends EventEmitter {
    * @event Device#connect
    * @type {object}
    * @property {boolean} connected - Indicates current connection status.
+   * @property {string} deviceUuid - The UUID of the device freshly connected
   */
 
 /**
@@ -183,6 +208,7 @@ class Device extends EventEmitter {
    * @event Device#disconnect
    * @type {object}
    * @property {boolean} connected - Indicates current connection status.
+   * @property {string} deviceUuid - The UUID of the device freshly disconnected
   */
 
 module.exports = Device
