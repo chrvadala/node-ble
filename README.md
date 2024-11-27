@@ -97,16 +97,16 @@ console.log(buffer)
 ```javascript
 const service2 = await gattServer.getPrimaryService('uuid')
 const characteristic2 = await service2.getCharacteristic('uuid')
-await characteristic2.startNotifications()
 characteristic2.on('valuechanged', buffer => {
   console.log(buffer)
 })
-await characteristic2.stopNotifications()
+await characteristic2.startNotifications()
 ```
 
 ## STEP 5: Disconnect
-When you have done you can disconnect and destroy the session.
+When you have done you can stop notifications, disconnect and destroy the session.
 ```javascript
+await characteristic2.stopNotifications()
 await device.disconnect()
 destroy()
 ```
