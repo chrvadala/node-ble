@@ -103,13 +103,13 @@ test('event:valuechanged', async () => {
 
 test('race condition between event:valuechanged / startNotification', async () => {
   const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
-  const cb = jest.fn(value => {});
+  const cb = jest.fn(value => {})
   characteristic.on('valuechanged', cb)
 
   // Wrap the call to StartNotify with an early property change to check this event is not lost in a race condition
   characteristic.helper.callMethod.mockImplementationOnce(async (method) => {
-    if (method != "StartNotify") {
-      throw new Error("Unexpected state in unit test")
+    if (method !== 'StartNotify') {
+      throw new Error('Unexpected state in unit test')
     }
 
     await characteristic.helper.callMethod('StartNotify')
@@ -122,13 +122,13 @@ test('race condition between event:valuechanged / startNotification', async () =
 
   // Start notifications, wait 200ms and send a second event
   characteristic.startNotifications()
-  await new Promise((r) => setTimeout(r, 200));
+  await new Promise((resolve) => setTimeout(resolve, 200))
   characteristic.helper.emit('PropertiesChanged',
     { Value: { signature: 'ay', value: [0x62, 0x61, 0x72] } } // means bar
   )
 
   // Check the mocked callback function has been called twice
-  expect(cb.mock.calls).toHaveLength(2);
+  expect(cb.mock.calls).toHaveLength(2)
 
   // Cleanup
   characteristic.off('valuechanged', cb)
