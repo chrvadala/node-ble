@@ -121,7 +121,7 @@ test('race condition in Device.js / disconnect()', async () => {
 
   const disconnectedFn = jest.fn()
   device.on('disconnect', disconnectedFn)
-  
+
   await device.disconnect()
 
   // Send the disconnect event slightly after the call to disconnect()
