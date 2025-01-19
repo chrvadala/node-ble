@@ -129,6 +129,7 @@ destroy()
 - **1.10** - Upgrades deps and gh-actions; Fixes memory leak [#37](https://github.com/chrvadala/node-ble/pull/37); Makes MAC Address case insensitive
 - **1.11** - Upgrades deps; Fixes doc [#69](https://github.com/chrvadala/node-ble/pull/69); Adds `getManufacturerData` and `getAdvertisingData`  functions on `Device` [#67](https://github.com/chrvadala/node-ble/pull/67); Adds `getServiceData` functions on `Device`; Improves pre-requisite doc section [#68](https://github.com/chrvadala/node-ble/pull/68)
 - **1.12** - Upgrades deps and actions; Fixes memory leak [#75](https://github.com/chrvadala/node-ble/pull/75); Improved docs with copy-and-paste configuration scripts.
+- **1.13** - Upgrades deps; Fixes race condition [#77](https://github.com/chrvadala/node-ble/pull/77)
 
 # Contributors
 - [chrvadala](https://github.com/chrvadala) (author)
@@ -141,6 +142,7 @@ destroy()
 - [raffone17](https://github.com/Raffone17)
 - [gmacario](https://github.com/gmacario)
 - [ianchanning](https://github.com/ianchanning)
+- [nmasse-itix](https://github.com/nmasse-itix)
 
 # References
 - https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt?h=5.64
