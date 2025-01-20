@@ -13,7 +13,6 @@ jest.doMock('../src/BusHelper', () => {
       this.waitPropChange = jest.fn()
       this.children = jest.fn()
       this.callMethod = jest.fn()
-      this.removeListeners = jest.fn()
     }
   }
 })
@@ -113,4 +112,26 @@ test('event:valuechanged', async () => {
   expect(disconnectedFn).toHaveBeenCalledWith({ connected: false })
 
   await device.disconnect()
+})
+
+test('race condition in Device.js / disconnect()', async () => {
+  const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+
+  await device.connect()
+
+  const disconnectedFn = jest.fn()
+  device.on('disconnect', disconnectedFn)
+
+  await device.disconnect()
+
+  // Send the disconnect event slightly after the call to disconnect()
+  device.helper.emit('PropertiesChanged',
+    { Connected: { signature: 'b', value: false } }
+  )
+
+  // Check that the disconnect event has been received
+  expect(disconnectedFn).toHaveBeenCalledWith({ connected: false })
+
+  // Cleanup
+  device.off('disconnect', disconnectedFn)
 })
