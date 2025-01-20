@@ -87,7 +87,7 @@ class BusHelper extends EventEmitter {
   }
 
   async children () {
-    this..removeListeners()
+    this.removeListeners()
     return BusHelper.buildChildren(this.object, this._objectProxy.nodes)
   }
 
