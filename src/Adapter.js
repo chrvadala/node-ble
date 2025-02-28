@@ -73,15 +73,22 @@ class Adapter {
 
   /**
    * This method starts the device discovery session.
+   * @param {boolean} duplicateData - Disables duplicate detection of
+   * advertisement data.
+   *
+   * When enabled PropertiesChanged signals will be generated for either
+   * ManufacturerData and ServiceData everytime they are discovered.
+   *
    * @async
    */
-  async startDiscovery () {
+  async startDiscovery (duplicateData = true) {
     if (await this.isDiscovering()) {
       throw new Error('Discovery already in progress')
     }
 
     await this.helper.callMethod('SetDiscoveryFilter', {
-      Transport: buildTypedValue('string', 'le')
+      Transport: buildTypedValue('string', 'le'),
+      DuplicateData: buildTypedValue('boolean', duplicateData)
     })
     await this.helper.callMethod('StartDiscovery')
   }

@@ -62,7 +62,7 @@ declare namespace NodeBle {
         getAlias(): Promise<string>;
         isPowered(): Promise<boolean>;
         isDiscovering(): Promise<boolean>;
-        startDiscovery(): Promise<void>;
+        startDiscovery(duplicateData?: boolean): Promise<void>;
         stopDiscovery(): Promise<void>;
         devices(): Promise<string[]>;
         getDevice(uuid: string): Promise<Device>;

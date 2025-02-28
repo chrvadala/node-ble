@@ -110,10 +110,17 @@ Indicates that a device discovery procedure is active.
 **Kind**: instance method of [<code>Adapter</code>](#Adapter)  
 <a name="Adapter+startDiscovery"></a>
 
-### adapter.startDiscovery()
+### adapter.startDiscovery([duplicateData])
 This method starts the device discovery session.
 
-**Kind**: instance method of [<code>Adapter</code>](#Adapter)  
+The `duplicateData` parameter can be used to control [BlueZ duplicate detection](https://web.git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/org.bluez.Adapter.rst).
+
+**Kind**: instance method of [<code>Adapter</code>](#Adapter)
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [duplicateData] | `boolean` | `true` | Disables duplicate detection of advertisement data. When enabled PropertiesChanged signals will be generated for either ManufacturerData and ServiceData everytime they are discovered. |
+
 <a name="Adapter+stopDiscovery"></a>
 
 ### adapter.stopDiscovery()
