@@ -16,6 +16,19 @@ class Device extends EventEmitter {
     this.adapter = adapter
     this.device = device
     this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1', { usePropsEvents: true })
+
+    const cb = (propertiesChanged) => {
+      if ('Connected' in propertiesChanged) {
+        const { value } = propertiesChanged.Connected
+        if (value) {
+          this.emit('connect', { connected: true })
+        } else {
+          this.emit('disconnect', { connected: false })
+        }
+      }
+    }
+
+    this.helper.on('PropertiesChanged', cb)
   }
 
   /**
@@ -124,18 +137,6 @@ class Device extends EventEmitter {
    * Connect to remote device
    */
   async connect () {
-    const cb = (propertiesChanged) => {
-      if ('Connected' in propertiesChanged) {
-        const { value } = propertiesChanged.Connected
-        if (value) {
-          this.emit('connect', { connected: true })
-        } else {
-          this.emit('disconnect', { connected: false })
-        }
-      }
-    }
-
-    this.helper.on('PropertiesChanged', cb)
     await this.helper.callMethod('Connect')
   }
 
