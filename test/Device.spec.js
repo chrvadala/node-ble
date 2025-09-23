@@ -89,7 +89,7 @@ test('gatt server initialization', async () => {
   expect(gattServer.init).toHaveBeenCalledTimes(1)
 })
 
-test('event:valuechanged', async () => {
+test('event:connect', async () => {
   const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
   const connectedFn = jest.fn()
