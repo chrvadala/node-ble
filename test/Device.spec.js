@@ -114,3 +114,36 @@ test('event:connect', async () => {
 
   await device.disconnect()
 })
+
+test('event:connect once per connect', async () => {
+  const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+
+  const connectedFn = jest.fn()
+  const disconnectedFn = jest.fn()
+
+  device.on('connect', connectedFn)
+  device.on('disconnect', disconnectedFn)
+
+  await device.connect()
+  device.helper.emit('PropertiesChanged',
+    { Connected: { signature: 'b', value: true } }
+  )
+
+  await device.disconnect()
+  device.helper.emit('PropertiesChanged',
+    { Connected: { signature: 'b', value: false } }
+  )
+
+  await device.connect()
+  device.helper.emit('PropertiesChanged',
+    { Connected: { signature: 'b', value: true } }
+  )
+
+  await device.disconnect()
+  device.helper.emit('PropertiesChanged',
+    { Connected: { signature: 'b', value: false } }
+  )
+
+  expect(connectedFn).toHaveBeenCalledTimes(2)
+  expect(disconnectedFn).toHaveBeenCalledTimes(2)
+})
