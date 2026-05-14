@@ -1,0 +1,97 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ble-seizu', {
+        category: 'input',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            mac: { value: "" },
+            handle: { value: "" },
+            operation: { value: "read", required: true },
+            retries: { value: 3 },
+            retryDelay: { value: 2000 },
+            subscribeTimeout: { value: 30000 }
+        },
+        inputs: 1,
+        outputs: 3,
+        outputLabels: ["stdout", "stderr", "return"],
+        icon: "bluetooth.png",
+        label: function() {
+            return this.name || "BLE Node";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="ble-seizu">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Node Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-mac"><i class="fa fa-bluetooth"></i> MAC Address</label>
+        <input type="text" id="node-input-mac" placeholder="D8:71:4D:00:6D:3D">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-handle"><i class="fa fa-cog"></i> Handle</label>
+        <input type="text" id="node-input-handle" placeholder="e.g. 0x0074">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-operation"><i class="fa fa-exchange"></i> Operation</label>
+        <select id="node-input-operation">
+            <option value="read">Read</option>
+            <option value="write">Write</option>
+            <option value="subscribe">Subscribe</option>
+            <option value="unsubscribe">Unsubscribe</option>
+            <option value="subscribe_once">Subscribe Once</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-retries"><i class="fa fa-repeat"></i> Max Retries</label>
+        <input type="number" id="node-input-retries" placeholder="3" min="1" max="10">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-retryDelay"><i class="fa fa-clock-o"></i> Retry Delay (ms)</label>
+        <input type="number" id="node-input-retryDelay" placeholder="2000" min="500" max="10000">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-subscribeTimeout"><i class="fa fa-hourglass"></i> Subscribe Timeout (ms)</label>
+        <input type="number" id="node-input-subscribeTimeout" placeholder="30000" min="1000" max="120000">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="ble-seizu">
+    <p>A node for BLE (Bluetooth Low Energy) operations using <code>node-ble</code>.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload.operation <span class="property-type">string</span></dt>
+        <dd>"read", "write", "subscribe", "unsubscribe" or "subscribe_once". Overrides node configuration.</dd>
+
+        <dt>payload.mac <span class="property-type">string</span></dt>
+        <dd>The MAC address of the BLE device.</dd>
+
+        <dt>payload.handle <span class="property-type">string | hex</span></dt>
+        <dd>The GATT handle to interact with.</dd>
+
+        <dt>payload.data <span class="property-type">string</span></dt>
+        <dd>Hex string data (required for write operations).</dd>
+
+        <dt>payload.write_handle <span class="property-type">string</span></dt>
+        <dd>Optional write handle for subscribe/subscribe_once trigger.</dd>
+
+        <dt>payload.write_data <span class="property-type">string</span></dt>
+        <dd>Optional hex data for subscribe/subscribe_once trigger.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <ol class="node-ports">
+        <li><strong>stdout:</strong> Success confirmation messages.</li>
+        <li><strong>stderr:</strong> Error messages.</li>
+        <li><strong>return:</strong> Raw hex data from read or notify operations.</li>
+    </ol>
+</script>

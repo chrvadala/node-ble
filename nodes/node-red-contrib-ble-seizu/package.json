@@ -1,0 +1,17 @@
+{
+  "name": "node-red-contrib-ble-seizu",
+  "version": "1.0.9",
+  "description": "A Node-RED node for BLE read/write operations using node-ble",
+  "main": "ble.js",
+  "scripts": {},
+  "author": "seizu",
+  "license": "MIT",
+  "dependencies": {
+    "node-ble": "^1.11.0"
+  },
+  "node-red": {
+    "nodes": {
+      "ble-seizu": "ble.js"
+    }
+  }
+}
