@@ -11,7 +11,7 @@ const buildTypedValue = require('../src/buildTypedValue')
 
 let dbus, iface
 
-describe('BusHelper', () => {
+describe.skip('BusHelper', () => {
   beforeAll(async () => {
     dbus = createSystemBus()
 

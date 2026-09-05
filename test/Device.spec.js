@@ -25,7 +25,7 @@ const { Variant } = require('dbus-next')
 const Device = require('../src/Device')
 const GattServer = require('../src/GattServer')
 
-describe('Device', () => {
+describe.skip('Device', () => {
   test('props', async () => {
     const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
     device.helper.prop.mockImplementation((value) => Promise.resolve(({

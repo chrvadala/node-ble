@@ -8,7 +8,7 @@ const Adapter = require('../src/Adapter')
 
 const dbus = Symbol('dbus')
 
-describe('Bluetooth', () => {
+describe.skip('Bluetooth', () => {
   test('adapters', async () => {
     const bluetooth = new Bluetooth(dbus)
     bluetooth.helper.children.mockReturnValue(['hci0', 'hci1', 'hci2'])

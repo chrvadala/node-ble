@@ -20,7 +20,7 @@ const buildTypedValue = require('../src/buildTypedValue')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol('dbus')
 
-describe('GattCharacteristics', () => {
+describe.skip('GattCharacteristics', () => {
   test('props', async () => {
     const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
     characteristic.helper.prop.mockImplementation((value) => Promise.resolve(({

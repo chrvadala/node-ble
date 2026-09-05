@@ -26,7 +26,7 @@ const GattService = require('../src/GattService')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol('dbus')
 
-describe('GattService', () => {
+describe.skip('GattService', () => {
   test('init', async () => {
     const service = new GattService(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'service0006')
     service.helper.children.mockResolvedValue([

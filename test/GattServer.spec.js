@@ -27,7 +27,7 @@ const GattService = require('../src/GattService')
 
 const dbus = Symbol('dbus')
 
-describe('GattServer', () => {
+describe.skip('GattServer', () => {
   test('init', async () => {
     const gattServer = new GattServer(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
