@@ -12,10 +12,10 @@ on:
 
 jobs:
   build_and_release:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.event.inputs.REPOSITORY_NAME ==  github.repository }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup dbus permissions
         run: sudo sh -c 'sed "s/my_username/runner/g" node-ble.conf > /etc/dbus-1/system.d/dbus.conf'
       - name: Release library
