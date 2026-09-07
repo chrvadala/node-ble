@@ -2,7 +2,7 @@
 
 const SERVICE_NAME = 'org.test'
 const OBJECT_PATH = '/org/example'
-const IFACE_NAME = 'org.example.iface'
+const IFACE_NAME = 'org.test.iface'
 
 const { sessionBus } = require('dbus-native')
 const TestInterface = require('./TestInterface')
