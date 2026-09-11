@@ -1,17 +1,26 @@
 const EventEmitter = require('events')
 
 const DEFAULT_OPTIONS = {
-  useProps: true,
   usePropsEvents: false
 }
 
 class BusHelper extends EventEmitter {
-  constructor (dbus, service, object, iface, options = {}) {
+  serviceName = null
+  objectPath = null
+  ifaceName = null
+  options = {}
+
+  _objectProxy = null
+  _ifaceProxy = null
+  _eventsProxy = null
+  #ready = false
+
+  constructor (dbus, serviceName, objectPath, ifaceName, options = {}) {
     super()
 
-    this.service = service
-    this.object = object
-    this.iface = iface
+    this.serviceName = serviceName
+    this.objectPath = objectPath
+    this.ifaceName = ifaceName
 
     this.dbus = dbus
 
@@ -19,105 +28,113 @@ class BusHelper extends EventEmitter {
       ...DEFAULT_OPTIONS,
       ...options
     }
-
-    this._ready = false
-    this._objectProxy = null
-    this._ifaceProxy = null
-    this._propsProxy = null
   }
 
-  async _prepare () {
-    if (this._ready) return
-    const objectProxy = this._objectProxy = await this.dbus.getProxyObject(this.service, this.object)
-    this._ifaceProxy = await objectProxy.getInterface(this.iface)
+  /**
+   * Initialize the DBus object, interface, and properties-event proxies.
+   * @returns {Promise<void>}
+   */
+  async init () {
+    if (this.#ready) return
 
-    if (this.options.useProps) {
-      this._propsProxy = await objectProxy.getInterface('org.freedesktop.DBus.Properties')
-    }
+    const objectProxy = await this.dbus.getObject(this.serviceName, this.objectPath)
+    const ifaceProxy = objectProxy.as(this.ifaceName)
+    const eventsProxy = objectProxy.as('org.freedesktop.DBus.Properties')
 
-    if (this.options.useProps && this.options.usePropsEvents) {
-      this._propsProxy.on('PropertiesChanged', (iface, changedProps, invalidated) => {
-        if (iface === this.iface) {
+    if (this.options.usePropsEvents) {
+      eventsProxy.on('PropertiesChanged', (iface, changedProps, invalidated) => {
+        if (iface === this.ifaceName) {
           this.emit('PropertiesChanged', changedProps)
         }
       })
     }
 
-    this._ready = true
+    this._objectProxy = objectProxy
+    this._ifaceProxy = ifaceProxy
+    this._eventsProxy = eventsProxy
+    this.#ready = true
   }
 
+  /**
+   * Remove local listeners and reset the initialized state.
+   * @returns {Promise<void>}
+   */
+  async destroy () {
+    this.removeAllListeners()
+    this._eventsProxy.off('PropertiesChanged')
+    this.#ready = false
+  }
+
+  /**
+   * Read all properties exposed by the DBus interface.
+   * @returns {Promise<Object>}
+   */
   async props () {
-    if (!this.options.useProps) throw new Error('props not available')
-    await this._prepare()
-    const rawProps = await this._propsProxy.GetAll(this.iface)
-    const props = {}
-    for (const propKey in rawProps) {
-      props[propKey] = rawProps[propKey].value
-    }
-    return props
+    await this.init()
+    return await this._ifaceProxy.$readAllProps()
   }
 
+  /**
+   * Read one property exposed by the DBus interface.
+   * @param {string} propName - The property name to read.
+   * @returns {Promise<*>}
+   */
   async prop (propName) {
-    if (!this.options.useProps) throw new Error('props not available')
-    await this._prepare()
-    const rawProp = await this._propsProxy.Get(this.iface, propName)
-    return rawProp.value
+    await this.init()
+    return await this._ifaceProxy.$readProp(propName)
   }
 
+  /**
+   * Write one property exposed by the DBus interface.
+   * @param {string} propName - The property name to write.
+   * @param {*} value - The value to assign.
+   * @returns {Promise<*>}
+   */
   async set (propName, value) {
-    if (!this.options.useProps) throw new Error('props not available')
-    await this._prepare()
-    await this._propsProxy.Set(this.iface, propName, value)
+    await this.init()
+    return await this._ifaceProxy.$writeProp(propName, value)
   }
 
+  /**
+   * Wait for a named property to change and return its new value.
+   * @param {string} propName - The property name to monitor.
+   * @returns {Promise<*>}
+   */
   async waitPropChange (propName) {
-    await this._prepare()
+    await this.init()
+
     return new Promise((resolve) => {
       const cb = (iface, changedProps, invalidated) => {
         // console.log('changed props on %s -> %o', iface, changedProps)
 
-        if (!(iface === this.iface && (propName in changedProps))) return
+        if (!(iface === this.ifaceName && (propName in changedProps))) return
 
-        resolve(changedProps[propName].value)
-        this._propsProxy.off('PropertiesChanged', cb)
+        resolve(changedProps[propName])
+        this._eventsProxy.off('PropertiesChanged', cb)
       }
-
-      this._propsProxy.on('PropertiesChanged', cb)
+      this._eventsProxy.on('PropertiesChanged', cb)
     })
   }
 
+  /**
+   * Return the child object paths exposed by the DBus object.
+   * @returns {Promise<string[]>}
+   */
   async children () {
-    this._ready = false // WORKAROUND: it forces to construct a new ProxyObject
-    await this._prepare()
-    return BusHelper.buildChildren(this.object, this._objectProxy.nodes)
+    await this.init()
+
+    return this._objectProxy.nodes
   }
 
+  /**
+   * Invoke a method on the DBus interface.
+   * @param {string} methodName - The method name to invoke.
+   * @param {...*} args - Arguments passed to the DBus method.
+   * @returns {Promise<*>}
+   */
   async callMethod (methodName, ...args) {
-    await this._prepare()
+    await this.init()
     return this._ifaceProxy[methodName](...args)
-  }
-
-  removeListeners () {
-    this.removeAllListeners('PropertiesChanged')
-    if (this._propsProxy !== null) {
-      this._propsProxy.removeAllListeners('PropertiesChanged')
-      this._ready = false
-    }
-  }
-
-  static buildChildren (path, nodes) {
-    if (path === '/') path = ''
-    const children = new Set()
-    for (const node of nodes) {
-      if (!node.startsWith(path)) continue
-
-      const end = node.indexOf('/', path.length + 1)
-      const sub = (end >= 0) ? node.substring(path.length + 1, end) : node.substring(path.length + 1)
-      if (sub.length < 1) continue
-
-      children.add(sub)
-    }
-    return Array.from(children.values())
   }
 }
 
