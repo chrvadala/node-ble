@@ -4,14 +4,14 @@ const SERVICE_NAME = 'org.test'
 const OBJECT_PATH = '/org/example'
 const IFACE_NAME = 'org.test.iface'
 
-const { sessionBus } = require('dbus-native')
+const { systemBus } = require('dbus-native')
 const TestInterface = require('./TestInterface')
 
 describe('test TestInterface', () => {
   let bus, emu
 
   beforeAll(async () => {
-    bus = sessionBus()
+    bus = systemBus()
     if (!bus) {
       throw new Error('Could not connect to the DBus session bus.')
     }

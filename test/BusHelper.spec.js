@@ -4,7 +4,7 @@ const SERVICE_NAME = 'org.test'
 const OBJECT_PATH = '/org/example'
 const IFACE_NAME = 'org.test.iface'
 
-const { sessionBus } = require('dbus-native')
+const { systemBus } = require('dbus-native')
 const BusHelper = require('../src/BusHelper')
 const TestInterface = require('./helpers/TestInterface')
 
@@ -13,7 +13,7 @@ const destroyable = []
 
 describe('BusHelper', () => {
   beforeAll(async () => {
-    dbus = sessionBus()
+    dbus = systemBus()
     if (!dbus) {
       throw new Error('Could not connect to the DBus session bus.')
     }
