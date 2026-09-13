@@ -77,7 +77,7 @@ declare namespace NodeBle {
     }
 
     function createBluetooth(): {
-        destroy(): void;
+        destroy(): Promise<void>;
         bluetooth: Bluetooth;
     };
 

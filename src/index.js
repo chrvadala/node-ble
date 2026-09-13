@@ -1,4 +1,4 @@
-const { systemBus: createSystemBus } = require('dbus-next')
+const { systemBus: createSystemBus } = require('dbus-native')
 const Bluetooth = require('./Bluetooth')
 
 /**
@@ -25,7 +25,10 @@ function createBluetooth () {
   const dbus = createSystemBus()
 
   const bluetooth = new Bluetooth(dbus)
-  const destroy = () => dbus.disconnect()
+
+  const destroy = async () => {
+    await dbus.close()
+  }
 
   return { bluetooth, destroy }
 }
