@@ -21,11 +21,10 @@ jest.mock('../src/GattServer')
 
 const dbus = Symbol('dbus')
 
-const { Variant } = require('dbus-next')
 const Device = require('../src/Device')
 const GattServer = require('../src/GattServer')
 
-describe.skip('Device', () => {
+describe('Device', () => {
   test('props', async () => {
     const device = new Device(dbus, 'hci0', 'dev_00_00_00_00_00_00')
     device.helper.prop.mockImplementation((value) => Promise.resolve(({
@@ -35,9 +34,9 @@ describe.skip('Device', () => {
       Alias: '_alias_',
       RSSI: 100,
       TxPower: 50,
-      ManufacturerData: { 1: new Variant('ay', Buffer.from([0x01, 0x02])) },
-      AdvertisingData: { 2: new Variant('ay', Buffer.from([0x03, 0x04])) },
-      ServiceData: { 3: new Variant('ay', Buffer.from([0x05, 0x6])) },
+      ManufacturerData: { 1: Buffer.from([0x01, 0x02]) },
+      AdvertisingData: { 2: Buffer.from([0x03, 0x04]) },
+      ServiceData: { 3: Buffer.from([0x05, 0x6]) },
       Paired: true,
       Connected: true
     }[value])))

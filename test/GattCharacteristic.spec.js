@@ -16,11 +16,10 @@ jest.doMock('../src/BusHelper', () => {
     }
   }
 })
-const buildTypedValue = require('../src/buildTypedValue')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol('dbus')
 
-describe.skip('GattCharacteristics', () => {
+describe('GattCharacteristics', () => {
   test('props', async () => {
     const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
     characteristic.helper.prop.mockImplementation((value) => Promise.resolve(({
@@ -38,7 +37,7 @@ describe.skip('GattCharacteristics', () => {
   test('read/write', async () => {
     const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
     const writeValueOptions = (offset = 0, type = 'reliable') => {
-      return { offset: buildTypedValue('uint16', offset), type: buildTypedValue('string', type) }
+      return { offset, type }
     }
 
     await expect(characteristic.writeValue('not_a_buffer')).rejects.toThrow('Only buffers can be wrote')
@@ -94,7 +93,7 @@ describe.skip('GattCharacteristics', () => {
     })
 
     characteristic.helper.emit('PropertiesChanged',
-      { Value: { signature: 'ay', value: [0x62, 0x61, 0x72] } } // means bar
+      { Value: Buffer.from([0x62, 0x61, 0x72]) } // means bar
     )
 
     await expect(res).resolves.toEqual(Buffer.from('bar'))
@@ -117,7 +116,7 @@ describe.skip('GattCharacteristics', () => {
 
       // Send the first event right after StartNotify
       characteristic.helper.emit('PropertiesChanged',
-        { Value: { signature: 'ay', value: [0x62, 0x61, 0x72] } } // means bar
+        { Value: Buffer.from([0x62, 0x61, 0x72]) } // means bar
       )
     })
 

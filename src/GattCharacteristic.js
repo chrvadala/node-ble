@@ -1,6 +1,5 @@
 const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
-const buildTypedValue = require('./buildTypedValue')
 
 /**
  * @classdesc GattCharacteristic class interacts with a GATT characteristic.
@@ -50,7 +49,7 @@ class GattCharacteristic extends EventEmitter {
    */
   async readValue (offset = 0) {
     const options = {
-      offset: buildTypedValue('uint16', offset)
+      offset
     }
     const payload = await this.helper.callMethod('ReadValue', options)
     return Buffer.from(payload)
@@ -72,8 +71,8 @@ class GattCharacteristic extends EventEmitter {
     const mergedOptions = Object.assign({ offset: 0, type: 'reliable' }, options)
 
     const callOptions = {
-      offset: buildTypedValue('uint16', mergedOptions.offset),
-      type: buildTypedValue('string', mergedOptions.type)
+      offset: mergedOptions.offset,
+      type: mergedOptions.type
     }
 
     const { data } = value.toJSON()
@@ -107,8 +106,7 @@ class GattCharacteristic extends EventEmitter {
   async startNotifications () {
     const cb = (propertiesChanged) => {
       if ('Value' in propertiesChanged) {
-        const { value } = propertiesChanged.Value
-        this.emit('valuechanged', Buffer.from(value))
+        this.emit('valuechanged', propertiesChanged.Value)
       }
     }
 
