@@ -1,7 +1,6 @@
 const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
 const GattServer = require('./GattServer')
-const parseDict = require('./parseDict')
 
 /**
  * @classdesc Device class interacts with a remote device.
@@ -71,7 +70,7 @@ class Device extends EventEmitter {
    * @returns {Object.<string, any>}
    */
   async getManufacturerData () {
-    return parseDict(await this.helper.prop('ManufacturerData'))
+    return await this.helper.prop('ManufacturerData')
   }
 
   /**
@@ -79,7 +78,7 @@ class Device extends EventEmitter {
    * @returns {Object.<string, any>}
    */
   async getAdvertisingData () {
-    return parseDict(await this.helper.prop('AdvertisingData'))
+    return await this.helper.prop('AdvertisingData')
   }
 
   /**
@@ -87,7 +86,7 @@ class Device extends EventEmitter {
    * @returns {Object.<string, any>}
    */
   async getServiceData () {
-    return parseDict(await this.helper.prop('ServiceData'))
+    return await this.helper.prop('ServiceData')
   }
 
   /**

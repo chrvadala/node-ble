@@ -35,8 +35,7 @@
     "docs:api": "jsdoc2md --template docs/templates/api.hbs --example-lang js --heading-depth 2 src/*.js > docs/api.md"
   },
   "dependencies": {
-    "dbus-native": "^0.15.2",
-    "dbus-next": "^0.10.2"
+    "dbus-native": "^0.15.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
