@@ -1,5 +1,6 @@
 const EventEmitter = require('events')
 const BusHelper = require('./BusHelper')
+const BusTypes = require('./BusTypes')
 
 /**
  * @classdesc GattCharacteristic class interacts with a GATT characteristic.
@@ -49,7 +50,7 @@ class GattCharacteristic extends EventEmitter {
    */
   async readValue (offset = 0) {
     const options = {
-      offset
+      offset: BusTypes.uint16(offset)
     }
     const payload = await this.helper.callMethod('ReadValue', options)
     return Buffer.from(payload)
@@ -71,7 +72,7 @@ class GattCharacteristic extends EventEmitter {
     const mergedOptions = Object.assign({ offset: 0, type: 'reliable' }, options)
 
     const callOptions = {
-      offset: mergedOptions.offset,
+      offset: BusTypes.uint16(mergedOptions.offset),
       type: mergedOptions.type
     }
 

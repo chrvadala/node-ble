@@ -16,6 +16,7 @@ jest.doMock('../src/BusHelper', () => {
     }
   }
 })
+const BusTypes = require('../src/BusTypes')
 const GattCharacteristic = require('../src/GattCharacteristic')
 const dbus = Symbol('dbus')
 
@@ -37,7 +38,7 @@ describe('GattCharacteristics', () => {
   test('read/write', async () => {
     const characteristic = new GattCharacteristic(dbus, 'hci0', 'dev_00_00_00_00_00_00', 'characteristic0006', 'char008')
     const writeValueOptions = (offset = 0, type = 'reliable') => {
-      return { offset, type }
+      return { offset: BusTypes.uint16(offset), type }
     }
 
     await expect(characteristic.writeValue('not_a_buffer')).rejects.toThrow('Only buffers can be wrote')
