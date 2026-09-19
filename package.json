@@ -26,6 +26,7 @@
   "homepage": "https://github.com/chrvadala/node-ble",
   "scripts": {
     "build": "npm run docs:api",
+    "dev": "jest --testPathIgnorePatterns=test-e2e/ --watch",
     "test": "npm run test:eslint && npm run test:coverage && npm run test:typescript",
     "test:jest": "jest --testPathIgnorePatterns=test-e2e/",
     "test:coverage": "jest --testPathIgnorePatterns=test-e2e/ --coverage",
