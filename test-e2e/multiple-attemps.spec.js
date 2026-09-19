@@ -25,9 +25,11 @@ test.each(['#1', '#2', '#3'])('gatt e2e %s', async (attempt) => {
   await device.connect()
 
   const dbus = bluetooth.dbus
+
   const name = `/org/bluez/${device.adapter}/${device.device}`
-  // console.log(dbus._signals._events)
-  const listenerCount = dbus._signals.listenerCount(`{"path":"${name}","interface":"org.freedesktop.DBus.Properties","member":"PropertiesChanged"}`)
-  expect(listenerCount).toBe(1)
+  const event = `{"path":"${name}","interface":"org.freedesktop.DBus.Properties","member":"PropertiesChanged"}`
+  // console.log(dbus.signals._events)
+  expect(dbus.signals.listenerCount(event)).toBe(1)
   await device.disconnect()
+  expect(dbus.signals.listenerCount(event)).toBe(0)
 }, 10 * 1000)
