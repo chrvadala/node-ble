@@ -13,7 +13,7 @@ jest.doMock('../src/BusHelper', () => {
       this.waitPropChange = jest.fn()
       this.children = jest.fn()
       this.callMethod = jest.fn()
-      this.removeListeners = jest.fn()
+      this.destroy = jest.fn()
     }
   }
 })
