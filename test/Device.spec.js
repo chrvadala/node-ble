@@ -101,13 +101,13 @@ describe('Device', () => {
     device.on('disconnect', disconnectedFn)
 
     device.helper.emit('PropertiesChanged',
-      { Connected: { signature: 'b', value: true } }
+      { Connected: true }
     )
 
     expect(connectedFn).toHaveBeenCalledWith({ connected: true })
 
     device.helper.emit('PropertiesChanged',
-      { Connected: { signature: 'b', value: false } }
+      { Connected: false }
     )
 
     expect(disconnectedFn).toHaveBeenCalledWith({ connected: false })

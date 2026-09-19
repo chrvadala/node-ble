@@ -125,7 +125,7 @@ class Device extends EventEmitter {
   async connect () {
     const cb = (propertiesChanged) => {
       if ('Connected' in propertiesChanged) {
-        const { value } = propertiesChanged.Connected
+        const value = propertiesChanged.Connected
         if (value) {
           this.emit('connect', { connected: true })
         } else {

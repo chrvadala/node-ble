@@ -1,4 +1,4 @@
-/* global test, expect, beforeAll, afterAll */
+/* global test, expect, beforeAll, afterAll, jest */
 const { getTestDevice } = require('./e2e-test-utils.js')
 const { createBluetooth } = require('..')
 
@@ -18,10 +18,13 @@ afterAll(async () => {
 })
 
 test.each(['#1', '#2', '#3'])('gatt e2e %s', async (attempt) => {
+  const onConnect = jest.fn(() => console.log({ attempt, event: 'connect' }))
+  const onDisconnect = jest.fn(() => console.log({ attempt, event: 'disconnect' }))
+
   expect(TEST_DEVICE).not.toBeUndefined()
   device = await adapter.waitDevice(TEST_DEVICE)
-  device.on('connect', () => console.log({ attempt, event: 'connect' }))
-  device.on('disconnect', () => console.log({ attempt, event: 'disconnect' }))
+  device.on('connect', onConnect)
+  device.on('disconnect', onDisconnect)
   await device.connect()
 
   const dbus = bluetooth.dbus
@@ -32,4 +35,7 @@ test.each(['#1', '#2', '#3'])('gatt e2e %s', async (attempt) => {
   expect(dbus.signals.listenerCount(event)).toBe(1)
   await device.disconnect()
   expect(dbus.signals.listenerCount(event)).toBe(0)
+
+  expect(onConnect).toHaveBeenCalledTimes(1)
+  expect(onDisconnect).toHaveBeenCalledTimes(1)
 }, 10 * 1000)
