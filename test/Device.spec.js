@@ -6,7 +6,7 @@ jest.doMock('../src/BusHelper', () => {
   return class BusHelperMock extends EventEmitter {
     constructor () {
       super()
-      this._prepare = jest.fn()
+      this.init = jest.fn()
       this.props = jest.fn()
       this.prop = jest.fn()
       this.set = jest.fn()

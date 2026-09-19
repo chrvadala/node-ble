@@ -11,7 +11,7 @@ const dbus = Symbol('dbus')
 describe('Bluetooth', () => {
   test('adapters', async () => {
     const bluetooth = new Bluetooth(dbus)
-    bluetooth.helper.children.mockReturnValue(['hci0', 'hci1', 'hci2'])
+    bluetooth.helper.children.mockResolvedValue(['hci0', 'hci1', 'hci2'])
 
     const adapters = await bluetooth.adapters()
     expect(adapters).toEqual(['hci0', 'hci1', 'hci2'])
@@ -19,9 +19,9 @@ describe('Bluetooth', () => {
 
   test('getAdapter', async () => {
     const bluetooth = new Bluetooth(dbus)
-    bluetooth.helper.children.mockReturnValue(['hci0', 'hci1'])
+    bluetooth.helper.children.mockResolvedValue(['hci0', 'hci1'])
 
-    await expect(bluetooth.getAdapter('hci5')).rejects.toThrowError('Adapter not found')
+    await expect(bluetooth.getAdapter('hci5')).rejects.toThrow('Adapter not found')
 
     const adapter = await bluetooth.getAdapter('hci0')
     expect(adapter).toBeInstanceOf(Adapter)
@@ -31,14 +31,14 @@ describe('Bluetooth', () => {
   describe('defaultAdapter', () => {
     it('should not found adapters', async () => {
       const bluetooth = new Bluetooth(dbus)
-      bluetooth.helper.children.mockReturnValue([])
+      bluetooth.helper.children.mockResolvedValue([])
 
-      await expect(bluetooth.defaultAdapter()).rejects.toThrowError('No available adapters found')
+      await expect(bluetooth.defaultAdapter()).rejects.toThrow('No available adapters found')
     })
 
     it('should be able to get an adapter', async () => {
       const bluetooth = new Bluetooth(dbus)
-      bluetooth.helper.children.mockReturnValue(['hci0'])
+      bluetooth.helper.children.mockResolvedValue(['hci0'])
 
       const adapter = await bluetooth.defaultAdapter()
       expect(adapter).toBeInstanceOf(Adapter)
@@ -60,7 +60,7 @@ describe('Bluetooth', () => {
 
       const adapters = { hci0, hci1 }
       bluetooth.getAdapter = async name => adapters[name]
-      bluetooth.helper.children.mockReturnValue(['hci0', 'hci1'])
+      bluetooth.helper.children.mockResolvedValue(['hci0', 'hci1'])
 
       const result = await bluetooth.activeAdapters()
 
