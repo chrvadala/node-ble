@@ -39,9 +39,10 @@ class BusHelper extends EventEmitter {
 
     const objectProxy = await this.dbus.getObject(this.serviceName, this.objectPath)
     const ifaceProxy = objectProxy.as(this.ifaceName)
-    const eventsProxy = objectProxy.as('org.freedesktop.DBus.Properties')
+    let eventsProxy = null
 
     if (this.options.usePropsEvents) {
+      eventsProxy = objectProxy.as('org.freedesktop.DBus.Properties')
       eventsProxy.on('PropertiesChanged', (iface, changedProps, invalidated) => {
         if (iface === this.ifaceName) {
           this.emit('PropertiesChanged', changedProps)
@@ -61,7 +62,7 @@ class BusHelper extends EventEmitter {
    */
   async destroy () {
     this.removeAllListeners()
-    this._eventsProxy.off('PropertiesChanged')
+    if (this._eventsProxy) this._eventsProxy.off('PropertiesChanged')
     this.#ready = false
   }
 
@@ -102,6 +103,10 @@ class BusHelper extends EventEmitter {
    */
   async waitPropChange (propName) {
     await this.init()
+
+    if (!this.options.usePropsEvents) {
+      throw new Error('Mode usePropsEvents is not enabled')
+    }
 
     return new Promise((resolve) => {
       const cb = (iface, changedProps, invalidated) => {

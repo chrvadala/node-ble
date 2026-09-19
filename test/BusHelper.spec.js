@@ -81,7 +81,8 @@ describe('BusHelper', () => {
   })
 
   test('waitPropChange', async () => {
-    const helper = new BusHelper(dbus, SERVICE_NAME, OBJECT_PATH, IFACE_NAME)
+    const helper = new BusHelper(dbus, SERVICE_NAME, OBJECT_PATH, IFACE_NAME, { usePropsEvents: true })
+    await helper.init()
 
     let value = await helper.prop('VirtualProperty')
     const res = helper.waitPropChange('VirtualProperty')
@@ -94,6 +95,12 @@ describe('BusHelper', () => {
     const res2 = helper.waitPropChange('VirtualProperty')
     await helper.set('VirtualProperty', 'byebye')
     await expect(res2).resolves.toEqual('byebye')
+  })
+
+  test('waitPropChange:failing', async () => {
+    const helper = new BusHelper(dbus, SERVICE_NAME, OBJECT_PATH, IFACE_NAME, { usePropsEvents: false })
+    await helper.init()
+    await expect(helper.waitPropChange('VirtualProperty')).rejects.toEqual(new Error('Mode usePropsEvents is not enabled'))
   })
 
   test('propsEvents', async () => {
