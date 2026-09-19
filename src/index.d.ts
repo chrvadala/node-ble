@@ -17,7 +17,7 @@ declare namespace NodeBle {
     }
 
     interface GattService {
-        isPrimary(): Promise<Boolean>;
+        isPrimary(): Promise<boolean>;
         getUUID(): Promise<string>;
         characteristics(): Promise<string[]>;
         toString(): Promise<string>;
@@ -38,12 +38,13 @@ declare namespace NodeBle {
         getAddress(): Promise<string>;
         getAddressType(): Promise<string>;
         getAlias(): Promise<string>;
-        getRSSI(): Promise<string>;
+        getRSSI(): Promise<number>;
+        getTXPower(): Promise<number>;
         getManufacturerData(): Promise<{[key:string]:any}>;
         getAdvertisingData(): Promise<{[key:string]:any}>;
         getServiceData(): Promise<{[key:string]:any}>;
-        isPaired(): Promise<string>;
-        isConnected(): Promise<string>;
+        isPaired(): Promise<boolean>;
+        isConnected(): Promise<boolean>;
         pair(): Promise<void>;
         cancelPair(): Promise<void>;
         connect(): Promise<void>;
