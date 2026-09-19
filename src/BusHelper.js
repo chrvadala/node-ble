@@ -121,9 +121,10 @@ class BusHelper extends EventEmitter {
    * @returns {Promise<string[]>}
    */
   async children () {
-    await this.init()
+    // I can't rely on this._objectProxy.nodes because the underlying library doesn't refresh
+    const objectProxy = await this.dbus.getObject(this.serviceName, this.objectPath)
 
-    return this._objectProxy.nodes
+    return objectProxy.nodes
   }
 
   /**

@@ -71,6 +71,13 @@ describe('BusHelper', () => {
     const helper = new BusHelper(dbus, SERVICE_NAME, OBJECT_PATH, IFACE_NAME)
     const children = await helper.children()
     expect(children).toEqual(['bar', 'foo'])
+
+    const o = new TestInterface(dbus, SERVICE_NAME, `${OBJECT_PATH}/xyz`, IFACE_NAME)
+    await o.init()
+    destroyable.push(o)
+
+    const children2 = await helper.children()
+    expect(children2).toEqual(['bar', 'foo', 'xyz'])
   })
 
   test('waitPropChange', async () => {
