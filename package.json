@@ -43,7 +43,7 @@
     "@types/node": "^26.6.2",
     "jest": "^30.5.2",
     "jsdoc-to-markdown": "^9.1.3",
-    "neostandard": "^0.13.0",
+    "neostandard": "0.14.0-next.1",
     "typescript": "^7.0.2"
   },
   "funding": "https://github.com/sponsors/chrvadala"
