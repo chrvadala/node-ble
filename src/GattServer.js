@@ -11,7 +11,7 @@ class GattServer {
     this.dbus = dbus
     this.adapter = adapter
     this.device = device
-    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1')
+    this.helper = new BusHelper(dbus, 'org.bluez', `/org/bluez/${adapter}/${device}`, 'org.bluez.Device1', { usePropsEvents: true })
 
     this._services = {}
   }

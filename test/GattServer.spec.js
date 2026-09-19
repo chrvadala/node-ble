@@ -1,6 +1,6 @@
 /* global describe, test, expect, jest */
 
-jest.mock('../src/BusHelper')
+// jest.mock('../src/BusHelper')
 jest.mock('../src/GattService', () => {
   const UUIDs = {
     service001: '00000000-0000-1000-8000-000000000001',
@@ -28,16 +28,49 @@ const GattService = require('../src/GattService')
 const dbus = Symbol('dbus')
 
 describe('GattServer', () => {
-  test('init', async () => {
+  test('get service when ServicesResolved=true', async () => {
     const gattServer = new GattServer(dbus, 'hci0', 'dev_00_00_00_00_00_00')
 
-    gattServer.helper.children.mockResolvedValue([
-      'service001',
-      'service002',
-      'service003'
+    jest.spyOn(gattServer.helper, 'children')
+      .mockReturnValue([
+        'service001',
+        'service002',
+        'service003'
+      ])
+
+    jest.spyOn(gattServer.helper, 'prop')
+      .mockImplementation(propName => propName === 'ServicesResolved' ? true : undefined)
+
+    await gattServer.init()
+
+    await expect(gattServer.services()).resolves.toEqual([
+      '00000000-0000-1000-8000-000000000001',
+      '00000000-0000-1000-8000-000000000002',
+      '00000000-0000-1000-8000-000000000003'
     ])
 
-    gattServer.helper.prop.mockImplementation(propName => propName === 'ServicesResolved' ? true : undefined)
+    const service = await gattServer.getPrimaryService('00000000-0000-1000-8000-000000000002')
+    await expect(service).toBeInstanceOf(GattService)
+    await expect(service.getUUID()).resolves.toBe('00000000-0000-1000-8000-000000000002')
+    await expect(service._service).toBe('service002')
+  })
+
+  test('get service when ServicesResolved=false', async () => {
+    const gattServer = new GattServer(dbus, 'hci0', 'dev_00_00_00_00_00_00')
+    expect(gattServer.helper.options.usePropsEvents).toBeTruthy()
+
+    jest.spyOn(gattServer.helper, 'children')
+      .mockReturnValue([
+        'service001',
+        'service002',
+        'service003'
+      ])
+
+    jest.spyOn(gattServer.helper, 'prop')
+      .mockImplementation(propName => propName === 'ServicesResolved' ? false : undefined)
+
+    jest.spyOn(gattServer.helper, 'waitPropChange')
+      .mockImplementation(() => Promise.resolve())
 
     await gattServer.init()
 
